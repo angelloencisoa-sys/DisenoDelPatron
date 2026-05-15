@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GarantiaPrendaria {
+public class GarantiaPrendaria extends Garantia{
     private String placaVehiculo;
     private String marca;
     private String modelo;
