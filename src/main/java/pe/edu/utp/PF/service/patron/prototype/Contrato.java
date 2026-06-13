@@ -32,18 +32,25 @@ public class Contrato implements Cloneable{
     /** Fecha exacta en la que se legaliza y firma el documento. */
     private LocalDate fechaFirma;
 
-    /** Ruta o URI donde se almacena el documento digitalizado firmado (PDF) en el servidor. */
-    private String rutaArchivoDigital;
 
-    /** Cláusulas especiales, excepciones o condiciones adicionales pactadas para este crédito. */
+    @Column(columnDefinition = "TEXT")
     private String clausulasExtras;
+
+
+    public String tipo;
 
     /** Expediente de la solicitud origen que desencadenó la generación de este contrato. */
     @OneToOne
     @JoinColumn(name = "solicitud_id")
     private SolicitudCredito solicitud;
 
-    /** Crédito activo que se encuentra amparado bajo los términos de este contrato. */
-    @OneToOne(mappedBy = "contrato")
-    private Credito credito;
+
+    public void clonar() {
+        System.out.println("Clonando un Contrato de tipo " + this.tipo);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
