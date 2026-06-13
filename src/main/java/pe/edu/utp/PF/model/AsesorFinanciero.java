@@ -16,7 +16,7 @@ import java.util.List;
 public class AsesorFinanciero {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idAsesor;
+    private Long idAsesor;
     private String nombreAsesor;
     private String codigoAgencia;
 
