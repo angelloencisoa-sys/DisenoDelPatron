@@ -6,6 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Clase que almacena las variables institucionales y los parámetros globales de negocio
+ * que rigen los cálculos financieros del sistema.
+ *
+ * @author Grupo 07
+ * @version 2.0
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,11 +24,18 @@ public class ConfiguracionFinanciera {
     @Transient // Anotación JPA para que no intente guardar este atributo en la tabla
     private static ConfiguracionFinanciera instancia;
 
+    /** Código de registro de la configuración vigente. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idConfiguracion;
+
+    /** Tasa máxima de interés permitida por ley o por los entes reguladores del país. */
     private Double tasaInteresMaximaLegal;
+
+    /** Factor o porcentaje aplicado diariamente sobre cuotas que caigan en estado de mora. */
     private Double porcentajeMoraDiaria;
+
+    /** Impuesto General a las Ventas aplicable a ciertos cargos administrativos de las cuotas. */
     private Double igv;
 
     // Metodo estático para obtener la instancia única
