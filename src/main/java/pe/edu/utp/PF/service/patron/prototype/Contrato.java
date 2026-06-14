@@ -32,10 +32,8 @@ public class Contrato implements Cloneable{
     /** Fecha exacta en la que se legaliza y firma el documento. */
     private LocalDate fechaFirma;
 
-
     @Column(columnDefinition = "TEXT")
     private String clausulasExtras;
-
 
     public String tipo;
 
@@ -43,7 +41,6 @@ public class Contrato implements Cloneable{
     @OneToOne
     @JoinColumn(name = "solicitud_id")
     private SolicitudCredito solicitud;
-
 
     public void clonar() {
         System.out.println("Clonando un Contrato de tipo " + this.tipo);

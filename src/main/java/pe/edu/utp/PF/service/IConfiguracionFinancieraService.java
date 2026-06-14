@@ -1,0 +1,21 @@
+package pe.edu.utp.PF.service;
+
+import pe.edu.utp.PF.service.patron.singleton.ConfiguracionFinanciera;
+
+public interface IConfiguracionFinancieraService {
+
+    /**
+     * Metodo para obtener la instancia unica de los parametros financieros del sistema
+     *
+     * @return Objeto unico de ConfiguracionFinanciera
+     */
+    ConfiguracionFinanciera obtenerConfiguracionUnica();
+
+    /**
+     * Metodo para actualizar los valores de la configuracion global
+     *
+     * @param p Parámetro con los nuevos valores de tasas e IGV
+     * @return Retorna el objeto unico actualizado
+     */
+    ConfiguracionFinanciera updateConfiguracion(ConfiguracionFinanciera p);
+}

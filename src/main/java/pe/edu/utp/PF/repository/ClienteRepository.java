@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     Optional<Cliente> findByNombresCompletos(String nombresCompletos);
+
+    Optional<Cliente> findByDocumento(void attr0);
 }

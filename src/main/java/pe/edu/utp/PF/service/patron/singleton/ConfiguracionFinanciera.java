@@ -14,8 +14,6 @@ import lombok.Setter;
  * @version 2.0
  */
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class ConfiguracionFinanciera {
@@ -47,7 +45,6 @@ public class ConfiguracionFinanciera {
             instancia.tasaInteresMaximaLegal = 83.4;
             instancia.porcentajeMoraDiaria = 0.5;
             instancia.igv = 18.0;
-        }
-        return instancia;
+        }        return instancia;
     }
 }
