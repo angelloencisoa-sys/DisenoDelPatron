@@ -8,20 +8,21 @@ import org.springframework.stereotype.Service;
 import pe.edu.utp.PF.repository.ConfiguracionFinancieraRepository;
 import pe.edu.utp.PF.service.ConfiguracionFinancieraService;
 import pe.edu.utp.PF.model.ConfiguracionFinanciera;
+import pe.edu.utp.PF.service.patron.singleton.UtilSingleton;
 
 @RequiredArgsConstructor
 @Slf4j // Para usar logger
 @Service
 public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancieraService {
 
-    private ConfiguracionFinancieraRepository repo;
+    private final ConfiguracionFinancieraRepository repo;
 
     @Transactional
     @Override
     public ConfiguracionFinanciera obtenerConfiguracionUnica() {
         try {
             // El Singleton garantiza una sola instancia en memoria
-            ConfiguracionFinanciera instanciaMemoria = ConfiguracionFinanciera.getInstancia();
+            ConfiguracionFinanciera instanciaMemoria = UtilSingleton.getInstance();
 
             // Verificamos si ya existe guardada en la Base de Datos (ID fijo = 1)
             var configuracionDb = repo.findById(1);
@@ -41,10 +42,10 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
             return instanciaMemoria;
         } catch (DataAccessException e) {
             log.error("Error de acceso a datos al obtener configuracion Singleton: {}", e.getMessage());
-            return ConfiguracionFinanciera.getInstancia(); // Failsafe: retorna el de memoria
+            return UtilSingleton.getInstance(); // Failsafe
         } catch (Exception e) {
             log.error("Error inesperado al gestionar Singleton financiero: {}", e.getMessage(), e);
-            return ConfiguracionFinanciera.getInstancia();
+            return UtilSingleton.getInstance();
         }
     }
 
@@ -53,7 +54,7 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
     public ConfiguracionFinanciera updateConfiguracion(ConfiguracionFinanciera p) {
         try {
             // Sincronizamos con nuestra instancia unica Singleton
-            ConfiguracionFinanciera old = ConfiguracionFinanciera.getInstancia();
+            ConfiguracionFinanciera old = UtilSingleton.getInstance();
             old.setTasaInteresMaximaLegal(p.getTasaInteresMaximaLegal());
             old.setPorcentajeMoraDiaria(p.getPorcentajeMoraDiaria());
             old.setIgv(p.getIgv());
