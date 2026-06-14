@@ -7,7 +7,7 @@ public class GestorContrato {
     private HashMap<String, Contrato> prototipos = new HashMap<>();
 
     public GestorContrato() {
-        // Inicializamos los prototipos base como hiciste con Circulo y Rectangulo
+
         Contrato contratoConsumo = new Contrato();
         contratoConsumo.tipo = "Consumo";
         contratoConsumo.setClausulasExtras("Cláusulas estándar para crédito de consumo: Tasa fija...");
@@ -20,8 +20,12 @@ public class GestorContrato {
         prototipos.put("Microempresa", contratoMicroempresa);
     }
 
-    // Exactamente igual a: public Forma obtenerFormas(String tipo)
+
     public Contrato obtenerContrato(String tipo) throws CloneNotSupportedException {
-        return (Contrato) prototipos.get(tipo).clone();
+        Contrato prototipo = prototipos.get(tipo);
+        if (prototipo == null) {
+            throw new IllegalArgumentException("No existe un prototipo de contrato para el tipo: " + tipo);
+        }
+        return (Contrato) prototipo.clone();
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import pe.edu.utp.PF.repository.ConfiguracionFinancieraRepository;
 import pe.edu.utp.PF.service.IConfiguracionFinancieraService;
-import pe.edu.utp.PF.service.patron.singleton.ConfiguracionFinanciera;
+import pe.edu.utp.PF.model.ConfiguracionFinanciera;
 
 @RequiredArgsConstructor
 @Slf4j // Para usar logger

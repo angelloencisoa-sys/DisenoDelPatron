@@ -1,4 +1,4 @@
-package pe.edu.utp.PF.service.patron.singleton;
+package pe.edu.utp.PF.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,11 +16,10 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConfiguracionFinanciera {
 
-    // 1. Instancia estática y privada de la propia clase (Singleton)
-    @Transient // Anotación JPA para que no intente guardar este atributo en la tabla
-    private static ConfiguracionFinanciera instancia;
 
     /** Código de registro de la configuración vigente. */
     @Id
@@ -36,15 +35,5 @@ public class ConfiguracionFinanciera {
     /** Impuesto General a las Ventas aplicable a ciertos cargos administrativos de las cuotas. */
     private Double igv;
 
-    // Metodo estático para obtener la instancia única
-    public static synchronized ConfiguracionFinanciera getInstancia() {
-        if (instancia == null) {
-            instancia = new ConfiguracionFinanciera();
-            // Valores por defecto al inicializar el sistema por primera vez
-            instancia.idConfiguracion = 1;
-            instancia.tasaInteresMaximaLegal = 83.4;
-            instancia.porcentajeMoraDiaria = 0.5;
-            instancia.igv = 18.0;
-        }        return instancia;
-    }
+
 }

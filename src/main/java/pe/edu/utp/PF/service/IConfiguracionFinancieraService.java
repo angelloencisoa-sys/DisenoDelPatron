@@ -1,6 +1,6 @@
 package pe.edu.utp.PF.service;
 
-import pe.edu.utp.PF.service.patron.singleton.ConfiguracionFinanciera;
+import pe.edu.utp.PF.model.ConfiguracionFinanciera;
 
 public interface IConfiguracionFinancieraService {
 
