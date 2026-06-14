@@ -2,20 +2,24 @@ package pe.edu.utp.PF.service;
 
 import pe.edu.utp.PF.model.ConfiguracionFinanciera;
 
+/**
+ * Interface que define los métodos de servicio para la configuración global del sistema.
+ * Aplica el patrón Singleton para garantizar una única instancia de los parámetros financieros.
+ */
 public interface ConfiguracionFinancieraService {
 
     /**
-     * Metodo para obtener la instancia unica de los parametros financieros del sistema
+     * Metodo para obtener la instancia única de los parámetros financieros del sistema.
      *
-     * @return Objeto unico de ConfiguracionFinanciera
+     * @return Objeto único de ConfiguracionFinanciera con los datos actuales.
      */
     ConfiguracionFinanciera getConfiguracionUnica();
 
     /**
-     * Metodo para actualizar los valores de la configuracion global
+     * Metodo para actualizar los valores de la configuración global (ej. IGV, moras).
      *
-     * @param p Parámetro con los nuevos valores de tasas e IGV
-     * @return Retorna el objeto unico actualizado
+     * @param p Objeto con los nuevos valores de tasas e IGV a actualizar.
+     * @return Retorna el objeto único actualizado en la base de datos.
      */
     ConfiguracionFinanciera updateConfiguracion(ConfiguracionFinanciera p);
 }

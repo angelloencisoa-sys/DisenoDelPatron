@@ -15,13 +15,24 @@ import pe.edu.utp.PF.repository.PagoRepository;
 import pe.edu.utp.PF.service.PagoService;
 
 
+/**
+ * Implementación de la interface PagoService.
+ * Maneja el ingreso de flujos de dinero al sistema amortizando cuotas,
+ * soportando polimorfismo sobre diferentes modalidades de pago.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class PagoServiceImpl implements PagoService {
 
-    private PagoRepository repo;
+    private final PagoRepository repo;
 
+    /**
+     * Busca un pago o comprobante individual de acuerdo a su ID.
+     *
+     * @param id Identificador único del pago.
+     * @return Un objeto Optional con el resultado de la búsqueda.
+     */
     @Transactional(readOnly = true)
     @Override
     public Optional<Pago> getById(Integer id) {
@@ -33,6 +44,11 @@ public class PagoServiceImpl implements PagoService {
         }
     }
 
+    /**
+     * Retorna el historial de todos los pagos registrados por la institución.
+     *
+     * @return Una lista de entidades derivadas de la clase Pago.
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Pago> getAll() {
@@ -44,6 +60,13 @@ public class PagoServiceImpl implements PagoService {
         }
     }
 
+    /**
+     * Procesa un nuevo ingreso de pago y lo registra con su estampa de tiempo actual.
+     *
+     * @param pago Entidad Pago (o sus hijas: Efectivo, Billetera Digital, etc.) a guardar.
+     * @return La operación de pago finalizada.
+     * @throws RuntimeException Si ocurren problemas en la inserción.
+     */
     @Transactional
     @Override
     public Pago create(Pago pago) {
@@ -58,6 +81,14 @@ public class PagoServiceImpl implements PagoService {
         }
     }
 
+    /**
+     * Edita información de un pago (ej. corrección del monto en un cuadre de caja).
+     *
+     * @param old El registro original validado del pago.
+     * @param pago El registro conteniendo las modificaciones deseadas.
+     * @return El pago con las correcciones aplicadas.
+     * @throws RuntimeException si la base de datos rechaza la actualización.
+     */
     @Transactional
     @Override
     public Pago update(Pago old, Pago pago) {
@@ -70,6 +101,12 @@ public class PagoServiceImpl implements PagoService {
         }
     }
 
+    /**
+     * Anula o elimina un pago erróneo del sistema mediante su ID.
+     *
+     * @param id Parámetro ID del pago a anular.
+     * @throws RuntimeException En caso de fallas durante el borrado.
+     */
     @Transactional
     @Override
     public void deleteById(Integer id) {

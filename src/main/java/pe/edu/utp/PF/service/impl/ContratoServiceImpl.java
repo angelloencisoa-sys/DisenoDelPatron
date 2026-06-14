@@ -14,15 +14,26 @@ import pe.edu.utp.PF.service.patron.prototype.GestorContrato;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * Implementación de la interface ContratoService.
+ * Encargada de gestionar la creación de contratos aplicando el patrón de diseño Prototype
+ * para optimizar la generación de cláusulas repetitivas.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContratoServiceImpl implements ContratoService {
 
     private ContratoRepository repo;
-    
+
     private GestorContrato gestorContrato; // Inyectamos tu Gestor
 
+    /**
+     * Recupera un contrato existente a partir de su identificador.
+     *
+     * @param id El ID del contrato que se desea consultar.
+     * @return Optional con el contrato si fue hallado en base de datos.
+     */
     @Transactional
     @Override
     public Optional<Contrato> getById(Integer id) {
@@ -43,6 +54,15 @@ public class ContratoServiceImpl implements ContratoService {
         }
     }
 
+    /**
+     * Genera un nuevo contrato mediante la clonación de un prototipo guardado en memoria,
+     * vinculándolo posteriormente a una solicitud de crédito.
+     *
+     * @param tipoContrato El nombre de la plantilla a clonar (ej. "Consumo", "Microempresa").
+     * @param idSolicitud El ID de la solicitud a la cual se anexa el contrato.
+     * @return El contrato ya generado, personalizado y guardado en base de datos.
+     * @throws RuntimeException si ocurre un fallo al clonar o al persistir en base de datos.
+     */
     @Transactional
     @Override
     public Contrato generarContratoDesdePlantilla(String tipoContrato, Integer idSolicitud) {

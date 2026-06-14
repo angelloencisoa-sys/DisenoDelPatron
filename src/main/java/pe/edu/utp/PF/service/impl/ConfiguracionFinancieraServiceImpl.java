@@ -10,6 +10,11 @@ import pe.edu.utp.PF.service.ConfiguracionFinancieraService;
 import pe.edu.utp.PF.model.ConfiguracionFinanciera;
 import pe.edu.utp.PF.service.patron.singleton.UtilSingleton;
 
+/**
+ * Implementación de la interface ConfiguracionFinancieraService.
+ * Coordina la instancia global Singleton de los parámetros financieros (tasas, mora, IGV)
+ * y asegura su persistencia en la base de datos.
+ */
 @RequiredArgsConstructor
 @Slf4j // Para usar logger
 @Service
@@ -17,6 +22,12 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
 
     private final ConfiguracionFinancieraRepository repo;
 
+    /**
+     * Recupera y sincroniza la configuración financiera global.
+     * Si no existe en la base de datos, guarda los valores por defecto del Singleton en memoria.
+     *
+     * @return La única instancia de ConfiguracionFinanciera válida.
+     */
     @Transactional
     @Override
     public ConfiguracionFinanciera getConfiguracionUnica() {
@@ -49,6 +60,13 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
         }
     }
 
+    /**
+     * Actualiza los valores de la instancia Singleton y los guarda en la base de datos.
+     *
+     * @param p Objeto ConfiguracionFinanciera que contiene las nuevas tasas o porcentajes.
+     * @return El objeto Singleton actualizado.
+     * @throws RuntimeException si hay problemas al guardar en la base de datos.
+     */
     @Transactional
     @Override
     public ConfiguracionFinanciera updateConfiguracion(ConfiguracionFinanciera p) {
