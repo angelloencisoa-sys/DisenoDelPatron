@@ -11,7 +11,7 @@ import pe.edu.utp.PF.model.ConfiguracionFinanciera;
 import pe.edu.utp.PF.service.patron.singleton.UtilSingleton;
 
 @RequiredArgsConstructor
-@Slf4j // Para usar logger
+@Slf4j
 @Service
 public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancieraService {
 
