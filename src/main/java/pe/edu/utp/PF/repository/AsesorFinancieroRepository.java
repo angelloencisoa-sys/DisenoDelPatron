@@ -5,7 +5,7 @@ import pe.edu.utp.PF.model.AsesorFinanciero;
 
 import java.util.List;
 
-public interface AsesorFinancieroRepository extends JpaRepository<AsesorFinanciero, Long> {
+public interface AsesorFinancieroRepository extends JpaRepository<AsesorFinanciero, Integer> {
 
     List<AsesorFinanciero> findByCodigoAgencia(String codigoAgencia);
 }

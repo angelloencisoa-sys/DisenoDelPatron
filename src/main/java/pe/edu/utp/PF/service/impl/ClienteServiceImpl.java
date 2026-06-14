@@ -1,6 +1,6 @@
 package pe.edu.utp.PF.service.impl;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -20,7 +20,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     private ClienteRepository repo;
 
-    @Transactional//(readOnly = true)
+    @Transactional(readOnly = true)
     @Override
     public Optional<Cliente> getById(Integer id) {
         try {
@@ -37,7 +37,7 @@ public class ClienteServiceImpl implements ClienteService {
         }
     }
 
-    @Transactional//(readOnly = true)
+    @Transactional(readOnly = true)
     @Override
     public List<Cliente> getAll() {
         try {

@@ -25,7 +25,7 @@ public class AsesorFinanciero {
     /** Identificador único autoincremental del asesor en la base de datos. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idAsesor;
+    private Integer idAsesor;
 
     /** Nombre completo del asesor financiero. */
     private String nombreAsesor;
