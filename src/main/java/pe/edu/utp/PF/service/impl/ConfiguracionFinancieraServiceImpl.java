@@ -16,7 +16,7 @@ import pe.edu.utp.PF.service.patron.singleton.UtilSingleton;
  * y asegura su persistencia en la base de datos.
  */
 @RequiredArgsConstructor
-@Slf4j // Para usar logger
+@Slf4j
 @Service
 public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancieraService {
 
