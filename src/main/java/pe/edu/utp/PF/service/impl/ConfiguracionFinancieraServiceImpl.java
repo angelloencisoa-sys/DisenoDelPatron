@@ -19,7 +19,7 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
 
     @Transactional
     @Override
-    public ConfiguracionFinanciera obtenerConfiguracionUnica() {
+    public ConfiguracionFinanciera getConfiguracionUnica() {
         try {
             // El Singleton garantiza una sola instancia en memoria
             ConfiguracionFinanciera instanciaMemoria = UtilSingleton.getInstance();

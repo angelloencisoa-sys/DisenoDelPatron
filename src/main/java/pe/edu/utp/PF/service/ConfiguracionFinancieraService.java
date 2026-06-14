@@ -9,7 +9,7 @@ public interface ConfiguracionFinancieraService {
      *
      * @return Objeto unico de ConfiguracionFinanciera
      */
-    ConfiguracionFinanciera obtenerConfiguracionUnica();
+    ConfiguracionFinanciera getConfiguracionUnica();
 
     /**
      * Metodo para actualizar los valores de la configuracion global
