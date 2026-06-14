@@ -4,7 +4,7 @@ import pe.edu.utp.PF.service.patron.prototype.Contrato;
 
 import java.util.Optional;
 
-public interface IContratoService {
+public interface ContratoService {
     /**
      * Metodo para obtener un objeto contrato por Id
      *

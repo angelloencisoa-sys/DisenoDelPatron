@@ -7,7 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import pe.edu.utp.PF.model.SolicitudCredito;
 import pe.edu.utp.PF.repository.ContratoRepository;
-import pe.edu.utp.PF.service.IContratoService;
+import pe.edu.utp.PF.service.ContratoService;
 import pe.edu.utp.PF.service.patron.prototype.Contrato;
 import pe.edu.utp.PF.service.patron.prototype.GestorContrato;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ContratoServiceImpl implements IContratoService {
+public class ContratoServiceImpl implements ContratoService {
 
     private ContratoRepository repo;
     

@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import pe.edu.utp.PF.repository.ConfiguracionFinancieraRepository;
-import pe.edu.utp.PF.service.IConfiguracionFinancieraService;
+import pe.edu.utp.PF.service.ConfiguracionFinancieraService;
 import pe.edu.utp.PF.model.ConfiguracionFinanciera;
 
 @RequiredArgsConstructor
 @Slf4j // Para usar logger
 @Service
-public class ConfiguracionFinancieraServiceImpl implements IConfiguracionFinancieraService {
+public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancieraService {
 
     private ConfiguracionFinancieraRepository repo;
 

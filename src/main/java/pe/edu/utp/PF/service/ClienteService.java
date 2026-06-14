@@ -5,10 +5,15 @@ import pe.edu.utp.PF.model.Cliente;
 import java.util.List;
 import java.util.Optional;
 
-public interface IClienteService {
+public interface ClienteService {
+
     Optional<Cliente> getById(Integer id);
+
     List<Cliente> getAll();
+
     Cliente create(Cliente cliente);
+
     Cliente update(Cliente old, Cliente cliente);
+
     void deleteById(Integer id);
 }

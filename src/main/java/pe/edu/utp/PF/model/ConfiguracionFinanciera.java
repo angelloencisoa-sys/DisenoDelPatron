@@ -20,7 +20,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ConfiguracionFinanciera {
 
-
     /** Código de registro de la configuración vigente. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

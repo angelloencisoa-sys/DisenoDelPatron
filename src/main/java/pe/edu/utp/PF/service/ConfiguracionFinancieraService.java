@@ -2,7 +2,7 @@ package pe.edu.utp.PF.service;
 
 import pe.edu.utp.PF.model.ConfiguracionFinanciera;
 
-public interface IConfiguracionFinancieraService {
+public interface ConfiguracionFinancieraService {
 
     /**
      * Metodo para obtener la instancia unica de los parametros financieros del sistema

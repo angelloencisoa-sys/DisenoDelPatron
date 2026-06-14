@@ -7,7 +7,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import pe.edu.utp.PF.model.Cliente;
 import pe.edu.utp.PF.repository.ClienteRepository;
-import pe.edu.utp.PF.service.IClienteService;
+import pe.edu.utp.PF.service.ClienteService;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class ClienteServiceImpl implements IClienteService {
+public class ClienteServiceImpl implements ClienteService {
 
     private ClienteRepository repo;
 
