@@ -77,7 +77,7 @@ public class ContratoServiceImpl implements ContratoService {
             solicitud.setIdSolicitud(idSolicitud);
 
             nuevoContrato.setSolicitud(solicitud);
-            nuevoContrato.setFechaFirma(LocalDate.now());
+            nuevoContrato.setFechaFirma(LocalDate.now(java.time.ZoneId.of("America/Lima")));
 
             // 3. Persistir el clon generado
             Contrato contratoGuardado = repo.save(nuevoContrato);

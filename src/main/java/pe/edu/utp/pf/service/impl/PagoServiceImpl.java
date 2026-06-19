@@ -73,7 +73,7 @@ public class PagoServiceImpl implements PagoService {
     public Pago create(Pago pago) {
         try {
             pago.setIdPago(null);
-            pago.setFechaHoraTransaccion(LocalDateTime.now());
+            pago.setFechaHoraTransaccion(LocalDateTime.now(java.time.ZoneId.of("America/Lima")));
             // Al ser polimórfico, si le pasas un PagoEfectivo o PagoBilleteraDigital, JPA sabrá qué hacer.
             return repo.save(pago);
         } catch (DataAccessException e) {
