@@ -68,9 +68,9 @@ public class ContratoServiceImpl implements ContratoService {
     @Override
     public Contrato generarContratoDesdePlantilla(String tipoContrato, Integer idSolicitud) {
         try {
-            // 1. Clonar el objeto prototipo desde el Gestor en memoria (Patrón Prototype)
+            // 1. Clonar el objeto prototipo de forma segura usando el constructor de copia interno
             Contrato nuevoContrato = gestorContrato.obtenerContrato(tipoContrato);
-            nuevoContrato.clonar(); // Log simulado del laboratorio
+            nuevoContrato.clonar();
 
             // 2. Personalizar campos especificos del negocio
             SolicitudCredito solicitud = new SolicitudCredito();
@@ -85,9 +85,6 @@ public class ContratoServiceImpl implements ContratoService {
 
             return contratoGuardado;
 
-        } catch (CloneNotSupportedException e) {
-            log.error("Error de clonacion: El tipo {} no soporta Prototype: {}", tipoContrato, e.getMessage());
-            throw new ServiceException("Error al clonar el prototipo de contrato", e);
         } catch (DataAccessException e) {
             log.error("Error de acceso a datos al guardar contrato clonado: {}", e.getMessage());
             throw new ServiceException("Error de base de datos al crear contrato", e);
