@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pe.edu.utp.PF.model.Credito;
 import pe.edu.utp.PF.model.SolicitudCredito;
 
 import java.time.LocalDate;
