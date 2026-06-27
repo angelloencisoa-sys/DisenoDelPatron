@@ -2,7 +2,7 @@ package pe.edu.utp.pf;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+//main project
 @SpringBootApplication
 public class PfGrupo07Application {
 	public static void main(String[] args) {
