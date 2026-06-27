@@ -21,41 +21,59 @@ import pe.edu.utp.pf.service.patron.prototype.Contrato;
 @Setter
 public class SolicitudCredito {
 
-    /** Identificador único de la solicitud de crédito. */
+    /**
+     * Identificador único de la solicitud de crédito.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSolicitud;
 
-    /** Cantidad de dinero total que el cliente solicita en préstamo. */
+    /**
+     * Cantidad de dinero total que el cliente solicita en préstamo.
+     */
     private Double montoSolicitado;
 
-    /** Periodo de tiempo en meses solicitado para amortizar la deuda. */
+    /**
+     * Periodo de tiempo en meses solicitado para amortizar la deuda.
+     */
     private Integer plazoMeses;
 
-    /** Estado actual del trámite. */
+    /**
+     * Estado actual del trámite.
+     */
     private String estado;
 
-    /** Cliente titular que realiza la postulación al crédito. */
+    /**
+     * Cliente titular que realiza la postulación al crédito.
+     */
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    /** Asesor financiero asignado para el estudio y seguimiento de este expediente. */
+    /**
+     * Asesor financiero asignado para el estudio y seguimiento de este expediente.
+     */
     @ManyToOne
     @JoinColumn(name = "asesor_id")
     private AsesorFinanciero asesor;
 
-    /** Informe técnico de evaluación de riesgos asociado a esta solicitud. */
+    /**
+     * Informe técnico de evaluación de riesgos asociado a esta solicitud.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "evaluacion_id")
     private EvaluacionRiesgo evaluacion;
 
-    /** Bien o aval registrado en el sistema como resguardo de la operación. */
+    /**
+     * Bien o aval registrado en el sistema como resguardo de la operación.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "garantia_id")
     private Garantia garantia;
 
-    /** Contrato legal generado una vez que la solicitud pasa a estado aprobado. */
+    /**
+     * Contrato legal generado una vez que la solicitud pasa a estado aprobado.
+     */
     @OneToOne(mappedBy = "solicitud")
     private Contrato contrato;
 }

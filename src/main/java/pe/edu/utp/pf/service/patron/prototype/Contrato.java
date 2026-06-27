@@ -23,14 +23,18 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Slf4j
-public class Contrato{
+public class Contrato {
 
-    /** Identificador único del documento contractual. */
+    /**
+     * Identificador único del documento contractual.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idContrato;
 
-    /** Fecha exacta en la que se legaliza y firma el documento. */
+    /**
+     * Fecha exacta en la que se legaliza y firma el documento.
+     */
     private LocalDate fechaFirma;
 
 
@@ -40,7 +44,9 @@ public class Contrato{
 
     private String tipo;
 
-    /** Expediente de la solicitud origen que desencadenó la generación de este contrato. */
+    /**
+     * Expediente de la solicitud origen que desencadenó la generación de este contrato.
+     */
     @OneToOne
     @JoinColumn(name = "solicitud_id")
     private SolicitudCredito solicitud;

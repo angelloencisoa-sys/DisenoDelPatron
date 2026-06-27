@@ -18,11 +18,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreditoMicroempresa extends Credito{
+public class CreditoMicroempresa extends Credito {
 
-    /** El sector comercial o actividad económica de la empresa (Ej. Comercio, Manufactura). */
+    /**
+     * El sector comercial o actividad económica de la empresa (Ej. Comercio, Manufactura).
+     */
     private String rubroNegocio;
 
-    /** Tiempo en meses que el negocio lleva operando de manera formal o comprobable. */
+    /**
+     * Tiempo en meses que el negocio lleva operando de manera formal o comprobable.
+     */
     private Integer tiempoOperacionMeses;
 }

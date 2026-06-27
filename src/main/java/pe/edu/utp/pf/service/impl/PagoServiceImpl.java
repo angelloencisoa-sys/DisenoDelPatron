@@ -85,7 +85,7 @@ public class PagoServiceImpl implements PagoService {
     /**
      * Edita información de un pago (ej. corrección del monto en un cuadre de caja).
      *
-     * @param old El registro original validado del pago.
+     * @param old  El registro original validado del pago.
      * @param pago El registro conteniendo las modificaciones deseadas.
      * @return El pago con las correcciones aplicadas.
      * @throws RuntimeException si la base de datos rechaza la actualización.

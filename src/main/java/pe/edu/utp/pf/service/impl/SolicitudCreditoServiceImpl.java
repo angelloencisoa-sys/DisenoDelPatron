@@ -81,7 +81,7 @@ public class SolicitudCreditoServiceImpl implements SolicitudCreditoService {
     /**
      * Modifica el estado, plazos o montos de una solicitud de crédito en revisión.
      *
-     * @param old El registro original en base de datos.
+     * @param old       El registro original en base de datos.
      * @param solicitud El objeto modificado proveniente del controlador o vista.
      * @return La solicitud debidamente actualizada.
      * @throws RuntimeException si surgen conflictos de persistencia.

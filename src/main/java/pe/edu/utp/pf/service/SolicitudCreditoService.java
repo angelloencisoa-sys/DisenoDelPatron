@@ -37,7 +37,7 @@ public interface SolicitudCreditoService {
     /**
      * Metodo para actualizar una solicitud de crédito existente (ej. cambiar su estado a "Aprobada").
      *
-     * @param old El objeto solicitud original antes de los cambios.
+     * @param old       El objeto solicitud original antes de los cambios.
      * @param solicitud El objeto solicitud con los datos actualizados.
      * @return Retorna el objeto solicitud actualizado.
      */

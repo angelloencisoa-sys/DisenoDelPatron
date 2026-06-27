@@ -20,18 +20,26 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ConfiguracionFinanciera {
 
-    /** Código de registro de la configuración vigente. */
+    /**
+     * Código de registro de la configuración vigente.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idConfiguracion;
 
-    /** Tasa máxima de interés permitida por ley o por los entes reguladores del país. */
+    /**
+     * Tasa máxima de interés permitida por ley o por los entes reguladores del país.
+     */
     private Double tasaInteresMaximaLegal;
 
-    /** Factor o porcentaje aplicado diariamente sobre cuotas que caigan en estado de mora. */
+    /**
+     * Factor o porcentaje aplicado diariamente sobre cuotas que caigan en estado de mora.
+     */
     private Double porcentajeMoraDiaria;
 
-    /** Impuesto General a las Ventas aplicable a ciertos cargos administrativos de las cuotas. */
+    /**
+     * Impuesto General a las Ventas aplicable a ciertos cargos administrativos de las cuotas.
+     */
     private Double igv;
 
 

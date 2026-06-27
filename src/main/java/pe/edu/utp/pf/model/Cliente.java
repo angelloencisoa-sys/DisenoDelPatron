@@ -22,34 +22,50 @@ import java.util.List;
 @Setter
 public class Cliente {
 
-    /** Identificador único del cliente dentro de la entidad financiera. */
+    /**
+     * Identificador único del cliente dentro de la entidad financiera.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCliente;
 
-    /** Nombres y apellidos completos o denominación de la persona. */
+    /**
+     * Nombres y apellidos completos o denominación de la persona.
+     */
     private String nombresCompletos;
 
-    /** Dirección del domicilio fiscal o residencial del cliente. */
+    /**
+     * Dirección del domicilio fiscal o residencial del cliente.
+     */
     private String direccion;
 
-    /** Número telefónico de contacto del cliente. */
+    /**
+     * Número telefónico de contacto del cliente.
+     */
     private String telefono;
 
-    /** Correo electrónico institucional o personal del cliente. */
+    /**
+     * Correo electrónico institucional o personal del cliente.
+     */
     private String email;
 
-    /** Perfil de riesgo asociado que determina la viabilidad de otorgarle préstamos. */
+    /**
+     * Perfil de riesgo asociado que determina la viabilidad de otorgarle préstamos.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "perfil_riesgo_id")
     private PerfilRiesgo perfilRiesgo;
 
-    /** Historial crediticio que detalla su comportamiento con créditos previos. */
+    /**
+     * Historial crediticio que detalla su comportamiento con créditos previos.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "historial_crediticio_id")
     private HistorialCrediticio historialCrediticio;
 
-    /** Listado de expedientes o solicitudes de crédito que el cliente ha tramitado. */
+    /**
+     * Listado de expedientes o solicitudes de crédito que el cliente ha tramitado.
+     */
     @OneToMany(mappedBy = "cliente")
     private List<SolicitudCredito> solicitudes;
 }

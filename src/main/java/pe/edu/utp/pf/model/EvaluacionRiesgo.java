@@ -22,21 +22,31 @@ import java.time.LocalDate;
 @Setter
 public class EvaluacionRiesgo {
 
-    /** Identificador único del reporte de evaluación de riesgo. */
+    /**
+     * Identificador único del reporte de evaluación de riesgo.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEvaluacion;
 
-    /** Fecha en la que el analista financiero emitió el dictamen. */
+    /**
+     * Fecha en la que el analista financiero emitió el dictamen.
+     */
     private LocalDate fechaEvaluacion;
 
-    /** Estado binario que indica si el crédito fue viable (true) o rechazado. */
+    /**
+     * Estado binario que indica si el crédito fue viable (true) o rechazado.
+     */
     private Boolean esAprobado;
 
-    /** Detalles técnicos, justificaciones o causales registradas por el personal evaluador. */
+    /**
+     * Detalles técnicos, justificaciones o causales registradas por el personal evaluador.
+     */
     private String observacionesAnalista;
 
-    /** Expediente o solicitud de crédito evaluada en este proceso. */
+    /**
+     * Expediente o solicitud de crédito evaluada en este proceso.
+     */
     @OneToOne(mappedBy = "evaluacion")
     private SolicitudCredito solicitud;
 }

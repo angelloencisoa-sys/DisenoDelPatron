@@ -18,14 +18,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ClienteNatural extends Cliente{
+public class ClienteNatural extends Cliente {
 
-    /** Documento Nacional de Identidad del cliente natural. */
+    /**
+     * Documento Nacional de Identidad del cliente natural.
+     */
     private String dni;
 
-    /** Estado civil actual del cliente (importante para evaluaciones de riesgo). */
+    /**
+     * Estado civil actual del cliente (importante para evaluaciones de riesgo).
+     */
     private String estadoCivil;
 
-    /** Puntaje acumulado en programas de fidelización financiera de la entidad. */
+    /**
+     * Puntaje acumulado en programas de fidelización financiera de la entidad.
+     */
     private Integer puntosFidelidad;
 }

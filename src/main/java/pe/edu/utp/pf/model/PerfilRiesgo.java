@@ -26,17 +26,25 @@ import java.time.LocalDate;
 @Setter
 public class PerfilRiesgo {
 
-    /** Identificador único del perfil de riesgo. */
+    /**
+     * Identificador único del perfil de riesgo.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPerfil;
 
-    /** Puntaje numérico predictivo sobre el comportamiento de pago. */
+    /**
+     * Puntaje numérico predictivo sobre el comportamiento de pago.
+     */
     private Integer scoreCrediticio;
 
-    /** Categorización cualitativa del nivel de peligro. */
+    /**
+     * Categorización cualitativa del nivel de peligro.
+     */
     private String nivelRiesgo;
 
-    /** Fecha de la última actualización del cálculo del perfil del cliente. */
+    /**
+     * Fecha de la última actualización del cálculo del perfil del cliente.
+     */
     private LocalDate fechaUltimaEvaluacion;
 }

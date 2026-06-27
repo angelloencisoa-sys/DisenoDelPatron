@@ -60,7 +60,7 @@ public class ContratoServiceImpl implements ContratoService {
      * vinculándolo posteriormente a una solicitud de crédito.
      *
      * @param tipoContrato El nombre de la plantilla a clonar (ej. "Consumo", "Microempresa").
-     * @param idSolicitud El ID de la solicitud a la cual se anexa el contrato.
+     * @param idSolicitud  El ID de la solicitud a la cual se anexa el contrato.
      * @return El contrato ya generado, personalizado y guardado en base de datos.
      * @throws RuntimeException si ocurre un fallo al clonar o al persistir en base de datos.
      */

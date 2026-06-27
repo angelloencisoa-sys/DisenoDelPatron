@@ -80,7 +80,7 @@ public class AsesorFinancieroServiceImpl implements AsesorFinancieroService {
     /**
      * Actualiza la información de un asesor financiero existente.
      *
-     * @param old El objeto AsesorFinanciero actual recuperado de la BD.
+     * @param old    El objeto AsesorFinanciero actual recuperado de la BD.
      * @param asesor El objeto AsesorFinanciero con los datos nuevos.
      * @return El objeto AsesorFinanciero actualizado.
      * @throws RuntimeException si ocurre un error en la base de datos.

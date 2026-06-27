@@ -37,7 +37,7 @@ public interface AsesorFinancieroService {
     /**
      * Metodo para actualizar los datos de un asesor financiero existente.
      *
-     * @param old El objeto asesor original antes de los cambios.
+     * @param old    El objeto asesor original antes de los cambios.
      * @param asesor El objeto asesor con los datos actualizados.
      * @return Retorna el objeto asesor actualizado.
      */

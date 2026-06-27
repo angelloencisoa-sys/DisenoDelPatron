@@ -22,21 +22,31 @@ import java.time.LocalDate;
 @Setter
 public class NotificacionMora {
 
-    /** Identificador único del registro de notificación de mora. */
+    /**
+     * Identificador único del registro de notificación de mora.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idNotificacion;
 
-    /** Fecha exacta en la que se generó y envió el aviso de alerta. */
+    /**
+     * Fecha exacta en la que se generó y envió el aviso de alerta.
+     */
     private LocalDate fechaEmision;
 
-    /** Cantidad de días transcurridos desde el vencimiento de la cuota hasta la emisión del aviso. */
+    /**
+     * Cantidad de días transcurridos desde el vencimiento de la cuota hasta la emisión del aviso.
+     */
     private Integer diasRetraso;
 
-    /** Texto o cuerpo informativo de la advertencia enviado al cliente. */
+    /**
+     * Texto o cuerpo informativo de la advertencia enviado al cliente.
+     */
     private String mensajeAlerta;
 
-    /** Cuota específica vencida que originó el disparo de esta alerta de cobro. */
+    /**
+     * Cuota específica vencida que originó el disparo de esta alerta de cobro.
+     */
     @ManyToOne
     @JoinColumn(name = "cuota_id")
     private Cuota cuota;

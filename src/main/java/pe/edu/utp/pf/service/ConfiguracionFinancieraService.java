@@ -22,4 +22,14 @@ public interface ConfiguracionFinancieraService {
      * @return Retorna el objeto único actualizado en la base de datos.
      */
     ConfiguracionFinanciera updateConfiguracion(ConfiguracionFinanciera p);
+
+    /**
+     * Metodo funcional de negocio para calcular el monto exacto de la mora.
+     * Aplica el porcentaje de mora diaria global sobre el capital adeudado según los días de retraso.
+     *
+     * @param montoCapital El dinero original que el cliente debía pagar en esa cuota.
+     * @param diasRetraso  Cantidad de días transcurridos desde el vencimiento de la cuota.
+     * @return El monto en soles de la mora calculada (Double). Retorna 0.0 si no hay retraso.
+     */
+    Double calcularMoraPorRetraso(Double montoCapital, Integer diasRetraso);
 }

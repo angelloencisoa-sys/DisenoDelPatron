@@ -22,18 +22,26 @@ import java.util.List;
 @Setter
 public class AsesorFinanciero {
 
-    /** Identificador único autoincremental del asesor en la base de datos. */
+    /**
+     * Identificador único autoincremental del asesor en la base de datos.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAsesor;
 
-    /** Nombre completo del asesor financiero. */
+    /**
+     * Nombre completo del asesor financiero.
+     */
     private String nombreAsesor;
 
-    /** Código identificador de la agencia o sucursal a la que pertenece el asesor. */
+    /**
+     * Código identificador de la agencia o sucursal a la que pertenece el asesor.
+     */
     private String codigoAgencia;
 
-    /** Lista de solicitudes de crédito asignadas a este asesor para su evaluación. */
+    /**
+     * Lista de solicitudes de crédito asignadas a este asesor para su evaluación.
+     */
     @OneToMany(mappedBy = "asesor")
     private List<SolicitudCredito> solicitudes;
 }

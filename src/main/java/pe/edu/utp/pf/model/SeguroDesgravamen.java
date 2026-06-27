@@ -20,18 +20,26 @@ import lombok.Setter;
 @Setter
 public class SeguroDesgravamen {
 
-    /** Identificador único del registro de póliza en el sistema. */
+    /**
+     * Identificador único del registro de póliza en el sistema.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSeguro;
 
-    /** Código identificador oficial del contrato con la compañía aseguradora externa. */
+    /**
+     * Código identificador oficial del contrato con la compañía aseguradora externa.
+     */
     private String codigoPoliza;
 
-    /** Prima o costo mensual adicionado de forma fija a las cuotas del préstamo. */
+    /**
+     * Prima o costo mensual adicionado de forma fija a las cuotas del préstamo.
+     */
     private Double costoMensual;
 
-    /** Crédito principal al cual se le asocia y protege este seguro. */
+    /**
+     * Crédito principal al cual se le asocia y protege este seguro.
+     */
     @ManyToOne
     @JoinColumn(name = "credito_id")
     private Credito credito;

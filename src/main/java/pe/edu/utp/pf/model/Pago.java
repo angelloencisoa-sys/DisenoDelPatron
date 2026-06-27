@@ -23,18 +23,26 @@ import java.time.LocalDateTime;
 @Setter
 public abstract class Pago {
 
-    /** Identificador único correlativo de la transacción de pago. */
+    /**
+     * Identificador único correlativo de la transacción de pago.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPago;
 
-    /** Marca de tiempo exacta (fecha y hora) en la que se procesó el abono. */
+    /**
+     * Marca de tiempo exacta (fecha y hora) en la que se procesó el abono.
+     */
     private LocalDateTime fechaHoraTransaccion;
 
-    /** Importe monetario neto que el cliente entrega para amortizar su deuda. */
+    /**
+     * Importe monetario neto que el cliente entrega para amortizar su deuda.
+     */
     private Double montoAbonado;
 
-    /** Cuota específica del cronograma a la cual se le aplica el dinero recaudado. */
+    /**
+     * Cuota específica del cronograma a la cual se le aplica el dinero recaudado.
+     */
     @ManyToOne
     @JoinColumn(name = "cuota_id")
     private Cuota cuota;

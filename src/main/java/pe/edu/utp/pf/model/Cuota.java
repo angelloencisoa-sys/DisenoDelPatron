@@ -23,36 +23,54 @@ import java.util.List;
 @Setter
 public class Cuota {
 
-    /** Identificador único de la cuota en el sistema. */
+    /**
+     * Identificador único de la cuota en el sistema.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCuota;
 
-    /** Número correlativo de la cuota dentro del préstamo. */
+    /**
+     * Número correlativo de la cuota dentro del préstamo.
+     */
     private Integer numeroCuota;
 
-    /** Fecha límite establecida para que el cliente liquide el monto de la cuota sin penalizaciones. */
+    /**
+     * Fecha límite establecida para que el cliente liquide el monto de la cuota sin penalizaciones.
+     */
     private LocalDate fechaVencimiento;
 
-    /** Fracción del monto que se destina directamente a amortizar el capital prestado. */
+    /**
+     * Fracción del monto que se destina directamente a amortizar el capital prestado.
+     */
     private Double montoCapital;
 
-    /** Monto correspondiente al cobro del interés generado en el periodo. */
+    /**
+     * Monto correspondiente al cobro del interés generado en el periodo.
+     */
     private Double montoInteres;
 
-    /** Estado administrativo actual de la cuota. */
+    /**
+     * Estado administrativo actual de la cuota.
+     */
     private String estadoPago;
 
-    /** Plan de pagos general en el que está integrada esta cuota. */
+    /**
+     * Plan de pagos general en el que está integrada esta cuota.
+     */
     @ManyToOne
     @JoinColumn(name = "cronograma_id")
     private Cronograma cronograma;
 
-    /** Transacciones o abonos económicos realizados por el cliente dirigidos a esta cuota. */
+    /**
+     * Transacciones o abonos económicos realizados por el cliente dirigidos a esta cuota.
+     */
     @OneToMany(mappedBy = "cuota")
     private List<Pago> pagos;
 
-    /** Historial de alertas enviadas al cliente en caso de que la cuota caiga en retraso. */
+    /**
+     * Historial de alertas enviadas al cliente en caso de que la cuota caiga en retraso.
+     */
     @OneToMany(mappedBy = "cuota")
     private List<NotificacionMora> notificaciones;
 }

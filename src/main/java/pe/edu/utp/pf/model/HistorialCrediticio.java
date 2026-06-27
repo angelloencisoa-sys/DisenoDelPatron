@@ -23,14 +23,20 @@ import lombok.Setter;
 @Setter
 public class HistorialCrediticio {
 
-    /** Código de identificación único del historial del cliente. */
+    /**
+     * Código de identificación único del historial del cliente.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idHistorial;
 
-    /** Cantidad total de obligaciones financieras vigentes que el cliente mantiene en el sistema. */
+    /**
+     * Cantidad total de obligaciones financieras vigentes que el cliente mantiene en el sistema.
+     */
     private Integer numeroCreditosActivos;
 
-    /** Flag de control que determina si el cliente posee obligaciones vencidas dadas por perdidas o castigadas. */
+    /**
+     * Flag de control que determina si el cliente posee obligaciones vencidas dadas por perdidas o castigadas.
+     */
     private Boolean tieneDeudasCastigadas;
 }

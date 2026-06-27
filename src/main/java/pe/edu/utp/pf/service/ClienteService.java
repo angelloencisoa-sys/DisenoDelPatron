@@ -37,7 +37,7 @@ public interface ClienteService {
     /**
      * Metodo para actualizar los datos personales o empresariales de un cliente existente.
      *
-     * @param old El objeto cliente original antes de los cambios.
+     * @param old     El objeto cliente original antes de los cambios.
      * @param cliente El objeto cliente con los datos actualizados.
      * @return Retorna el objeto cliente actualizado.
      */

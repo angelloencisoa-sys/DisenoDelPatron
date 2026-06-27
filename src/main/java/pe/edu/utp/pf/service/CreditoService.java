@@ -38,7 +38,7 @@ public interface CreditoService {
     /**
      * Metodo para actualizar los datos de un crédito existente.
      *
-     * @param old El objeto crédito original antes de los cambios.
+     * @param old     El objeto crédito original antes de los cambios.
      * @param credito El objeto crédito con los nuevos datos a actualizar.
      * @return Retorna el objeto crédito actualizado.
      */

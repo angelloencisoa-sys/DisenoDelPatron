@@ -18,11 +18,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PagoEfectivo extends Pago{
+public class PagoEfectivo extends Pago {
 
-    /** Código identificador del terminal físico o caja donde se recibió el dinero. */
+    /**
+     * Código identificador del terminal físico o caja donde se recibió el dinero.
+     */
     private String codigoCaja;
 
-    /** Número correlativo impreso en el comprobante físico de pago. */
+    /**
+     * Número correlativo impreso en el comprobante físico de pago.
+     */
     private String numeroVoucher;
 }

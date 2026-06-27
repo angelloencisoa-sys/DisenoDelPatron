@@ -21,18 +21,26 @@ import lombok.Setter;
 @Setter
 public abstract class Garantia {
 
-    /** Identificador único del registro de la garantía en la base de datos. */
+    /**
+     * Identificador único del registro de la garantía en la base de datos.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idGarantia;
 
-    /** Valor económico del bien determinado mediante tasación profesional. */
+    /**
+     * Valor económico del bien determinado mediante tasación profesional.
+     */
     private Double valorTasacion;
 
-    /** Resumen de las condiciones, estado o características generales del respaldo. */
+    /**
+     * Resumen de las condiciones, estado o características generales del respaldo.
+     */
     private String descripcion;
 
-    /** Solicitud de crédito a la que se anexa este respaldo económico para mitigar el riesgo. */
+    /**
+     * Solicitud de crédito a la que se anexa este respaldo económico para mitigar el riesgo.
+     */
     @OneToOne(mappedBy = "garantia")
     private SolicitudCredito solicitud;
 }

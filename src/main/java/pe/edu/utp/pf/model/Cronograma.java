@@ -23,19 +23,27 @@ import java.util.List;
 @Setter
 public class Cronograma {
 
-    /** Identificador único del cronograma de pagos. */
+    /**
+     * Identificador único del cronograma de pagos.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCronograma;
 
-    /** Fecha exacta en la que el sistema calculó y emitió el plan de pagos. */
+    /**
+     * Fecha exacta en la que el sistema calculó y emitió el plan de pagos.
+     */
     private LocalDate fechaGeneracion;
 
-    /** Crédito activo al cual pertenece y rige este calendario de pagos. */
+    /**
+     * Crédito activo al cual pertenece y rige este calendario de pagos.
+     */
     @OneToOne(mappedBy = "cronograma")
     private Credito credito;
 
-    /** Listado detallado de las cuotas periódicas que componen la amortización total. */
+    /**
+     * Listado detallado de las cuotas periódicas que componen la amortización total.
+     */
     @OneToMany(mappedBy = "cronograma", cascade = CascadeType.ALL)
     private List<Cuota> cuotas;
 }

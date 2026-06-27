@@ -89,4 +89,36 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
             throw new ServiceException("Error interno", e);
         }
     }
+
+
+    /**
+     * Calcula la penalidad económica (mora) aplicable a una cuota vencida según los días de retraso.
+     *
+     * @param montoCapital El monto original adeudado en la cuota sobre el cual se aplicará la mora.
+     * @param diasRetraso  El número de días calendario transcurridos desde el vencimiento de la cuota.
+     * @return El monto total calculado de la penalidad en soles (Double). Retorna 0.0 si no aplica mora.
+     */
+    @Transactional
+    @Override
+    public Double calcularMoraPorRetraso(Double montoCapital, Integer diasRetraso) {
+        try {
+            if (montoCapital == null || montoCapital <= 0 || diasRetraso == null || diasRetraso <= 0) {
+                log.debug("Cálculo de mora omitido: Capital o días de retraso no válidos.");
+                return 0.0;
+            }
+
+            ConfiguracionFinanciera config = getConfiguracionUnica();
+            Double porcentajeDiario = config.getPorcentajeMoraDiaria();
+
+            Double montoMora = montoCapital * ((porcentajeDiario / 100.0) * diasRetraso);
+
+            log.debug("Mora calculada: S/ {} para un capital de S/ {} con {} días de retraso.", montoMora, montoCapital, diasRetraso);
+
+            return montoMora;
+
+        } catch (Exception e) {
+            log.error("Error inesperado al calcular la mora por retraso: {}", e.getMessage(), e);
+            return 0.0;
+        }
+    }
 }

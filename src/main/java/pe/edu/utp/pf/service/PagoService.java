@@ -37,7 +37,7 @@ public interface PagoService {
     /**
      * Metodo para actualizar un registro de pago existente.
      *
-     * @param old El objeto pago original antes de los cambios.
+     * @param old  El objeto pago original antes de los cambios.
      * @param pago El objeto pago con los datos actualizados.
      * @return Retorna el objeto pago actualizado.
      */

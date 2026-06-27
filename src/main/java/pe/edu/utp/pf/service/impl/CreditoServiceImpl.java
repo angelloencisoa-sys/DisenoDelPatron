@@ -84,7 +84,7 @@ public class CreditoServiceImpl implements CreditoService {
     /**
      * Actualiza atributos específicos de un crédito vigente, como su tasa de interés o estado.
      *
-     * @param old Entidad original recuperada previamente de la BD.
+     * @param old     Entidad original recuperada previamente de la BD.
      * @param credito Entidad portadora de los nuevos valores.
      * @return El crédito actualizado.
      * @throws RuntimeException ante errores en el guardado.

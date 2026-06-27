@@ -18,14 +18,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PagoTransferencia extends Pago{
+public class PagoTransferencia extends Pago {
 
-    /** Número de cuenta bancaria desde donde el cliente transfirió el dinero. */
+    /**
+     * Número de cuenta bancaria desde donde el cliente transfirió el dinero.
+     */
     private String cuentaOrigen;
 
-    /** Nombre de la entidad bancaria externa de procedencia (Ej. BBVA, Scotiabank). */
+    /**
+     * Nombre de la entidad bancaria externa de procedencia (Ej. BBVA, Scotiabank).
+     */
     private String bancoOrigen;
 
-    /** Código de Cuenta Interbancario (CCI) utilizado en caso de operaciones cruzadas. */
+    /**
+     * Código de Cuenta Interbancario (CCI) utilizado en caso de operaciones cruzadas.
+     */
     private String codigoInterbancario;
 }

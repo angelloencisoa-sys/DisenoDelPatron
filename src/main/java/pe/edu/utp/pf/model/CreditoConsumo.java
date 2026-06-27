@@ -18,8 +18,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreditoConsumo extends Credito{
+public class CreditoConsumo extends Credito {
 
-    /** Justificación o destino del dinero solicitado. */
+    /**
+     * Justificación o destino del dinero solicitado.
+     */
     private String propositoCompra;
 }

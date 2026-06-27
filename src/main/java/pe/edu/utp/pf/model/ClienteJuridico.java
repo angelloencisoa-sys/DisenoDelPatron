@@ -18,17 +18,25 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ClienteJuridico extends Cliente{
+public class ClienteJuridico extends Cliente {
 
-    /** Registro Único de Contribuyentes de la empresa o negocio. */
+    /**
+     * Registro Único de Contribuyentes de la empresa o negocio.
+     */
     private String ruc;
 
-    /** Nombre legal o razón social registrada de la organización. */
+    /**
+     * Nombre legal o razón social registrada de la organización.
+     */
     private String razonSocial;
 
-    /** Nombre de la persona natural facultada para firmar o solicitar el crédito a nombre de la empresa. */
+    /**
+     * Nombre de la persona natural facultada para firmar o solicitar el crédito a nombre de la empresa.
+     */
     private String representanteLegal;
 
-    /** Score o puntaje corporativo asignado en base al tamaño e historial de la empresa. */
+    /**
+     * Score o puntaje corporativo asignado en base al tamaño e historial de la empresa.
+     */
     private Integer puntosCorporativos;
 }

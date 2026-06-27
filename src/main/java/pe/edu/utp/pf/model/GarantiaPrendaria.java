@@ -18,14 +18,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GarantiaPrendaria extends Garantia{
+public class GarantiaPrendaria extends Garantia {
 
-    /** Placa única de rodaje vehicular del automotor prendado. */
+    /**
+     * Placa única de rodaje vehicular del automotor prendado.
+     */
     private String placaVehiculo;
 
-    /** Empresa fabricante del vehículo en garantía. */
+    /**
+     * Empresa fabricante del vehículo en garantía.
+     */
     private String marca;
 
-    /** Denominación de la línea o diseño específico del automotor. */
+    /**
+     * Denominación de la línea o diseño específico del automotor.
+     */
     private String modelo;
 }

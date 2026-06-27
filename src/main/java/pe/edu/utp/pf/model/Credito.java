@@ -25,34 +25,50 @@ import java.util.List;
 @Setter
 public class Credito {
 
-    /** Código único identificador de la cuenta del crédito. */
+    /**
+     * Código único identificador de la cuenta del crédito.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCredito;
 
-    /** Monto neto total del capital que se otorga en préstamo. */
+    /**
+     * Monto neto total del capital que se otorga en préstamo.
+     */
     private Double capitalPrestado;
 
-    /** Tasa de interés pactada calculada en base anual para el cobro del servicio financiero. */
+    /**
+     * Tasa de interés pactada calculada en base anual para el cobro del servicio financiero.
+     */
     private Double tasaInteresAnual;
 
-    /** Fecha en la que los fondos del crédito son efectivamente entregados al cliente. */
+    /**
+     * Fecha en la que los fondos del crédito son efectivamente entregados al cliente.
+     */
     private LocalDate fechaDesembolso;
 
-    /** Estado actual de la deuda. */
+    /**
+     * Estado actual de la deuda.
+     */
     private String estadoCredito;
 
-    /** Documento legal del contrato asociado a este préstamo. */
+    /**
+     * Documento legal del contrato asociado a este préstamo.
+     */
     @OneToOne
     @JoinColumn(name = "contrato_id")
     private Contrato contrato;
 
-    /** Plan de pagos o cronograma asignado para la amortización del crédito. */
+    /**
+     * Plan de pagos o cronograma asignado para la amortización del crédito.
+     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cronograma_id")
     private Cronograma cronograma;
 
-    /** Seguros de desgravamen asociados que cubren el saldo de la deuda frente a imprevistos. */
+    /**
+     * Seguros de desgravamen asociados que cubren el saldo de la deuda frente a imprevistos.
+     */
     @OneToMany(mappedBy = "credito")
     private List<SeguroDesgravamen> seguros;
 }

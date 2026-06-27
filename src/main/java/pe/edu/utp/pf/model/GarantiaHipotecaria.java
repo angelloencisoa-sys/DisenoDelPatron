@@ -18,11 +18,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GarantiaHipotecaria extends Garantia{
+public class GarantiaHipotecaria extends Garantia {
 
-    /** Número de partida electrónica del inmueble inscrita en los Registros Públicos. */
+    /**
+     * Número de partida electrónica del inmueble inscrita en los Registros Públicos.
+     */
     private String numeroPartidaRegistral;
 
-    /** Ubicación física exacta y legal de la propiedad inmueble en garantía. */
+    /**
+     * Ubicación física exacta y legal de la propiedad inmueble en garantía.
+     */
     private String direccionInmueble;
 }

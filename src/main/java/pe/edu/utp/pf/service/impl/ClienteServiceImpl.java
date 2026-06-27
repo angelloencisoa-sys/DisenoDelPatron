@@ -88,7 +88,7 @@ public class ClienteServiceImpl implements ClienteService {
     /**
      * Actualiza los datos de contacto y detalles principales de un cliente.
      *
-     * @param old El objeto Cliente actual recuperado de la base de datos.
+     * @param old     El objeto Cliente actual recuperado de la base de datos.
      * @param cliente El objeto Cliente con la nueva información.
      * @return El cliente actualizado.
      * @throws RuntimeException si ocurre un error de persistencia.
