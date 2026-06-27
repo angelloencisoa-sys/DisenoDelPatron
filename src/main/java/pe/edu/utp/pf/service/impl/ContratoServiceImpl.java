@@ -17,7 +17,7 @@ import java.util.Optional;
 
 /**
  * Implementación de la interface ContratoService.
- * Encargada de gestionar la creación de contratos aplicando el patrón de diseño Prototype
+ * Encargada de gestionar la creación de contratos aplicando el patrón de diseño Prototype.
  * para optimizar la generación de cláusulas repetitivas.
  */
 @Slf4j

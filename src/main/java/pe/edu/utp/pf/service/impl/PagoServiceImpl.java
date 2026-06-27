@@ -19,7 +19,7 @@ import pe.edu.utp.pf.service.PagoService;
 /**
  * Implementación de la interface PagoService.
  * Maneja el ingreso de flujos de dinero al sistema amortizando cuotas,
- * soportando polimorfismo sobre diferentes modalidades de pago.
+ * soportando polimorfismo sobre diferentes modalidades del pago.
  */
 @Slf4j
 @RequiredArgsConstructor
