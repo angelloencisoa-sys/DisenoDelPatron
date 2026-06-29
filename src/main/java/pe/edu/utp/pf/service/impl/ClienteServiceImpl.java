@@ -77,7 +77,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente create(Cliente cliente) {
         try {
-            cliente.setIdCliente(null); // Asegurar que es un insert
+            cliente.setIdCliente(null);
             return repo.save(cliente);
         } catch (DataAccessException e) {
             log.error("Error de acceso a datos al crear cliente: {}", e.getMessage());
@@ -101,7 +101,6 @@ public class ClienteServiceImpl implements ClienteService {
             old.setDireccion(cliente.getDireccion());
             old.setTelefono(cliente.getTelefono());
             old.setEmail(cliente.getEmail());
-            // El guardado polimórfico en JPA actualizará las tablas hijas si es Natural o Jurídico
             return repo.save(old);
         } catch (DataAccessException e) {
             log.error("Error al actualizar cliente: {}", e.getMessage());

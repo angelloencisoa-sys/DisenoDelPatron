@@ -27,7 +27,7 @@ public class ContratoServiceImpl implements ContratoService {
 
     private ContratoRepository repo;
 
-    private GestorContrato gestorContrato; // Inyectamos tu Gestor
+    private GestorContrato gestorContrato;
 
     /**
      * Recupera un contrato existente a partir de su identificador.

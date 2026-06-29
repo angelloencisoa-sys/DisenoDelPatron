@@ -70,7 +70,7 @@ public class SolicitudCreditoServiceImpl implements SolicitudCreditoService {
     public SolicitudCredito create(SolicitudCredito solicitud) {
         try {
             solicitud.setIdSolicitud(null);
-            solicitud.setEstado("Pendiente"); // Estado inicial por defecto
+            solicitud.setEstado("Pendiente");
             return repo.save(solicitud);
         } catch (DataAccessException e) {
             log.error("Error al crear solicitud: {}", e.getMessage());

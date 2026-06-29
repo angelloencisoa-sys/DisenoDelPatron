@@ -33,15 +33,12 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
     @Override
     public ConfiguracionFinanciera getConfiguracionUnica() {
         try {
-            // El Singleton garantiza una sola instancia en memoria
             ConfiguracionFinanciera instanciaMemoria = UtilSingleton.getInstance();
 
-            // Verificamos si ya existe guardada en la Base de Datos (ID fijo = 1)
             var configuracionDb = repo.findById(1);
 
             if (configuracionDb.isPresent()) {
                 log.debug("Configuracion Financiera (Singleton) recuperada desde Base de Datos.");
-                // Sincronizamos la instancia de memoria con los ultimos datos guardados
                 ConfiguracionFinanciera dbValue = configuracionDb.get();
                 instanciaMemoria.setTasaInteresMaximaLegal(dbValue.getTasaInteresMaximaLegal());
                 instanciaMemoria.setPorcentajeMoraDiaria(dbValue.getPorcentajeMoraDiaria());
@@ -54,7 +51,7 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
             return instanciaMemoria;
         } catch (DataAccessException e) {
             log.error("Error de acceso a datos al obtener configuracion Singleton: {}", e.getMessage());
-            return UtilSingleton.getInstance(); // Failsafe
+            return UtilSingleton.getInstance();
         } catch (Exception e) {
             log.error("Error inesperado al gestionar Singleton financiero: {}", e.getMessage(), e);
             return UtilSingleton.getInstance();
@@ -72,7 +69,6 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
     @Override
     public ConfiguracionFinanciera updateConfiguracion(ConfiguracionFinanciera p) {
         try {
-            // Sincronizamos con nuestra instancia unica Singleton
             ConfiguracionFinanciera old = UtilSingleton.getInstance();
             old.setTasaInteresMaximaLegal(p.getTasaInteresMaximaLegal());
             old.setPorcentajeMoraDiaria(p.getPorcentajeMoraDiaria());

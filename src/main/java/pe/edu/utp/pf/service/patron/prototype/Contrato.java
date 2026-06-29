@@ -37,11 +37,15 @@ public class Contrato {
      */
     private LocalDate fechaFirma;
 
-
+    /**
+     * Texto íntegro que contiene los términos, condiciones y cláusulas legales del contrato.
+     */
     @Column(columnDefinition = "TEXT")
     private String clausulasExtras;
 
-
+    /**
+     * Categoría o denominación de la plantilla contractual (ej. "Consumo", "Microempresa").
+     */
     private String tipo;
 
     /**
@@ -52,10 +56,18 @@ public class Contrato {
     private SolicitudCredito solicitud;
 
 
+    /**
+     * Simula el proceso visual de clonación registrando un mensaje informativo en los logs.
+     */
     public void clonar() {
         log.info("Clonando un Contrato de tipo " + this.tipo);
     }
 
+    /**
+     * Constructor de copia utilizado para aplicar el patrón Prototype de forma segura.
+     *
+     * @param target Objeto {@code Contrato} que sirve como molde o prototipo a duplicar.
+     */
     public Contrato(Contrato target) {
         if (target != null) {
             this.clausulasExtras = target.getClausulasExtras();

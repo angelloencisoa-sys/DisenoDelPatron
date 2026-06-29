@@ -73,7 +73,6 @@ public class CreditoServiceImpl implements CreditoService {
     public Credito create(Credito credito) {
         try {
             credito.setIdCredito(null);
-            // JPA guardará automáticamente el Cronograma y las Cuotas si están mapeadas con CascadeType.ALL
             return repo.save(credito);
         } catch (DataAccessException e) {
             log.error("Error al desembolsar/crear crédito: {}", e.getMessage());
