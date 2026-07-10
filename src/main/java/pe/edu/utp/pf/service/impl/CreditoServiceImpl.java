@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.edu.utp.pf.exception.ServiceException;
 import pe.edu.utp.pf.model.Credito;
+import pe.edu.utp.pf.model.Cronograma;
 import pe.edu.utp.pf.repository.CreditoRepository;
 import pe.edu.utp.pf.service.CreditoService;
 
@@ -79,7 +80,7 @@ public class CreditoServiceImpl implements CreditoService {
             // ==========================================
 
             if (credito.getCronograma() == null) {
-                pe.edu.utp.pf.model.Cronograma nuevoCronograma = new pe.edu.utp.pf.model.Cronograma();
+                Cronograma nuevoCronograma = new Cronograma();
                 nuevoCronograma.setFechaGeneracion(java.time.LocalDate.now());
                 nuevoCronograma.setCredito(credito);
 
