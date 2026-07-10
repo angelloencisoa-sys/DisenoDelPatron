@@ -73,6 +73,22 @@ public class CreditoServiceImpl implements CreditoService {
     public Credito create(Credito credito) {
         try {
             credito.setIdCredito(null);
+
+            // ==========================================
+            // IMPLEMENTACIÓN PATRÓN CREADOR (GRASP)
+            // ==========================================
+
+            if (credito.getCronograma() == null) {
+                pe.edu.utp.pf.model.Cronograma nuevoCronograma = new pe.edu.utp.pf.model.Cronograma();
+                nuevoCronograma.setFechaGeneracion(java.time.LocalDate.now());
+                nuevoCronograma.setCredito(credito);
+
+
+                nuevoCronograma.setCuotas(java.util.Collections.emptyList());
+
+                credito.setCronograma(nuevoCronograma);
+            }
+
             return repo.save(credito);
         } catch (DataAccessException e) {
             log.error("Error al desembolsar/crear crédito: {}", e.getMessage());
