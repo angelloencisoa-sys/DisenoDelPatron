@@ -12,7 +12,6 @@ import pe.edu.utp.pf.model.AsesorFinanciero;
 import pe.edu.utp.pf.service.AsesorFinancieroService;
 
 import java.util.List;
-import java.util.Random;
 
 @Slf4j
 @RestController
@@ -22,7 +21,6 @@ import java.util.Random;
 public class AsesorFinancieroController {
 
     private final AsesorFinancieroService asesorService;
-    private final Random random = new Random();
 
     @GetMapping
     @Operation(summary = "Listar todos los asesores", description = "Retorna de manera limpia la lista completa de asesores registrados en la BD H2.")
@@ -43,7 +41,7 @@ public class AsesorFinancieroController {
 
     @PostMapping
     @Operation(summary = "Registrar asesores", description = "Permite registrar un asesor enviando su JSON, o generar registros masivos aleatorios usando el parámetro 'cantidad'.")
-    public ResponseEntity<?> registrar(
+    public ResponseEntity<Object> registrar(
             @Parameter(description = "Cantidad opcional de asesores aleatorios a auto-generar", required = false, example = "5")
             @RequestParam(required = false) Integer cantidad,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
@@ -54,7 +52,6 @@ public class AsesorFinancieroController {
             return ResponseEntity.status(HttpStatus.CREATED).body(asesorService.create(asesor));
         }
 
-        // Si no se envía ni parámetro ni JSON en el cuerpo
         return ResponseEntity.badRequest().body("Debe enviar un objeto JSON o especificar una 'cantidad' para la generación.");
     }
 
@@ -77,7 +74,8 @@ public class AsesorFinancieroController {
         return asesorService.getById(id)
                 .map(entidad -> {
                     asesorService.deleteById(id);
-                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+                    // CAMBIO AQUÍ: Se eliminó el "new ResponseEntity<Void>"
+                    return ResponseEntity.noContent().<Void>build();
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -30,7 +30,7 @@ public class ContratoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
+    /*
      * Endpoint oficial que gatilla la creación de un contrato clonando una plantilla en memoria.
      * Implementa de forma limpia el patrón de diseño Prototype requerido por la rúbrica.
      */

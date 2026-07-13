@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.utp.pf.model.Credito;
 import pe.edu.utp.pf.service.CreditoService;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 
 @Slf4j
 @RestController
@@ -23,7 +26,7 @@ import java.util.Random;
 public class CreditoController {
 
     private final CreditoService creditoService;
-    private final Random random = new Random();
+    private final SecureRandom random = new SecureRandom();
 
     @GetMapping
     @Operation(summary = "Listar todos los créditos", description = "Retorna la lista completa de préstamos vigentes o liquidados en la BD H2.")
@@ -44,13 +47,13 @@ public class CreditoController {
 
     @PostMapping
     @Operation(summary = "Desembolsar créditos", description = "Permite registrar un crédito manual vía JSON, o simular desembolsos masivos aleatorios usando el parámetro 'cantidad'.")
-    public ResponseEntity<?> desembolsarDirecto(
+    public ResponseEntity<Object> desembolsarDirecto(
             @Parameter(description = "Cantidad opcional de créditos aleatorios a auto-generar para pruebas", required = false, example = "3")
             @RequestParam(required = false) Integer cantidad,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
             @RequestBody(required = false) Credito credito) {
 
-        // Escenario A: Generación masiva aleatoria para testing del Grupo 07
+
         if (cantidad != null && cantidad > 0) {
             log.info("Gatillando generación masiva: Creando {} créditos de prueba", cantidad);
 
@@ -60,10 +63,9 @@ public class CreditoController {
                 Credito falso = new Credito();
                 falso.setCapitalPrestado(2000.0 + (random.nextInt(16) * 500)); // Montos entre 2000 y 10000 soles
                 falso.setTasaInteresAnual(12.5 + random.nextInt(5)); // Tasas entre 12.5% y 16.5%
-                falso.setFechaDesembolso(LocalDate.now().minusDays(random.nextInt(15))); // Desembolsados en las últimas 2 semanas
+                falso.setFechaDesembolso(LocalDate.now(ZoneId.of("America/Lima")).minusDays(ThreadLocalRandom.current().nextInt(15)));
                 falso.setEstadoCredito(estadosValidos[random.nextInt(estadosValidos.length)]);
 
-                // Relaciones iniciales en nulo (el servicio le creará el Cronograma automáticamente por patrón Creador)
                 falso.setContrato(null);
                 falso.setCronograma(null);
                 falso.setSeguros(null);
@@ -74,7 +76,7 @@ public class CreditoController {
                     .body("Se generaron con éxito " + cantidad + " créditos de prueba. Verifícalos en el GET para observar sus cronogramas auto-creados.");
         }
 
-        // Escenario B: Registro individual manual clásico
+
         if (credito != null) {
             log.info("Procesando desembolso de crédito individual manual");
             return ResponseEntity.status(HttpStatus.CREATED).body(creditoService.create(credito));
@@ -102,7 +104,7 @@ public class CreditoController {
         return creditoService.getById(id)
                 .map(entidad -> {
                     creditoService.deleteById(id);
-                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+                    return ResponseEntity.noContent().<Void>build();
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

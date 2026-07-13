@@ -14,10 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Implementación de la interface SolicitudCreditoService.
- * Coordina las etapas iniciales del trámite del crédito, su evaluación y sus garantías.
- */
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -25,12 +21,6 @@ public class SolicitudCreditoServiceImpl implements SolicitudCreditoService {
 
     private final SolicitudCreditoRepository repo;
 
-    /**
-     * Recupera el expediente completo de una solicitud por su ID.
-     *
-     * @param id El identificador único de la solicitud a buscar.
-     * @return Un objeto Optional con el resultado de la búsqueda en BD.
-     */
     @Transactional(readOnly = true)
     @Override
     public Optional<SolicitudCredito> getById(Integer id) {
@@ -42,11 +32,6 @@ public class SolicitudCreditoServiceImpl implements SolicitudCreditoService {
         }
     }
 
-    /**
-     * Consulta todas las solicitudes de crédito ingresadas en la agencia.
-     *
-     * @return Una colección de objetos de tipo SolicitudCredito.
-     */
     @Transactional(readOnly = true)
     @Override
     public List<SolicitudCredito> getAll() {
@@ -58,19 +43,14 @@ public class SolicitudCreditoServiceImpl implements SolicitudCreditoService {
         }
     }
 
-    /**
-     * Registra una nueva solicitud de trámite configurando su estado inicial como "Pendiente".
-     *
-     * @param solicitud Entidad correspondiente al trámite en proceso de apertura.
-     * @return La solicitud grabada con su número de expediente (ID).
-     * @throws RuntimeException Ante cualquier excepción originada por el motor de BD.
-     */
     @Transactional
     @Override
     public SolicitudCredito create(SolicitudCredito solicitud) {
         try {
             solicitud.setIdSolicitud(null);
-            solicitud.setEstado("Pendiente");
+            if (solicitud.getEstado() == null) {
+                solicitud.setEstado("Pendiente");
+            }
             return repo.save(solicitud);
         } catch (DataAccessException e) {
             log.error("Error al crear solicitud: {}", e.getMessage());
@@ -78,14 +58,6 @@ public class SolicitudCreditoServiceImpl implements SolicitudCreditoService {
         }
     }
 
-    /**
-     * Modifica el estado, plazos o montos de una solicitud de crédito en revisión.
-     *
-     * @param old       El registro original en base de datos.
-     * @param solicitud El objeto modificado proveniente del controlador o vista.
-     * @return La solicitud debidamente actualizada.
-     * @throws RuntimeException si surgen conflictos de persistencia.
-     */
     @Transactional
     @Override
     public SolicitudCredito update(SolicitudCredito old, SolicitudCredito solicitud) {
@@ -100,13 +72,6 @@ public class SolicitudCreditoServiceImpl implements SolicitudCreditoService {
         }
     }
 
-    /**
-     * Borra una solicitud de crédito del sistema, lo que implicaría también la
-     * remoción en cascada de sus evaluaciones o garantías atadas si están configuradas así en JPA.
-     *
-     * @param id El identificador único de la solicitud a desechar.
-     * @throws RuntimeException si la base de datos niega la eliminación.
-     */
     @Transactional
     @Override
     public void deleteById(Integer id) {

@@ -35,8 +35,7 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
             } else {
                 log.info("Primera ejecucion: Guardando valores por defecto del Singleton en la BD.");
 
-                // 💡 SOLUCIÓN DEFINITIVA: Creamos un clon limpio sin ID para entregárselo a Hibernate.
-                // Al ir el ID vacío (null), H2 aceptará la inserción y le asignará el ID 1 de forma natural.
+
                 ConfiguracionFinanciera nuevaConfigDb = new ConfiguracionFinanciera();
                 nuevaConfigDb.setTasaInteresMaximaLegal(instanciaMemoria.getTasaInteresMaximaLegal());
                 nuevaConfigDb.setPorcentajeMoraDiaria(instanciaMemoria.getPorcentajeMoraDiaria());

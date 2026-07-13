@@ -68,18 +68,17 @@ public class ContratoServiceImpl implements ContratoService {
     @Override
     public Contrato generarContratoDesdePlantilla(String tipoContrato, Integer idSolicitud) {
         try {
-            // 1. Clonar el objeto prototipo de forma segura usando el constructor de copia interno
+
             Contrato nuevoContrato = gestorContrato.obtenerContrato(tipoContrato);
             nuevoContrato.clonar();
 
-            // 2. Personalizar campos especificos del negocio
+
             SolicitudCredito solicitud = new SolicitudCredito();
             solicitud.setIdSolicitud(idSolicitud);
 
             nuevoContrato.setSolicitud(solicitud);
             nuevoContrato.setFechaFirma(LocalDate.now(java.time.ZoneId.of("America/Lima")));
 
-            // 3. Persistir el clon generado
             Contrato contratoGuardado = repo.save(nuevoContrato);
             log.info("Nuevo contrato de tipo {} generado exitosamente por Prototype con ID {}", tipoContrato, contratoGuardado.getIdContrato());
 

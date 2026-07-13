@@ -13,9 +13,10 @@ import pe.edu.utp.pf.model.HistorialCrediticio;
 import pe.edu.utp.pf.model.PerfilRiesgo;
 import pe.edu.utp.pf.service.ClienteService;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
-import java.util.Random;
 
 @Slf4j
 @RestController
@@ -25,7 +26,7 @@ import java.util.Random;
 public class ClienteController {
 
     private final ClienteService clienteService;
-    private final Random random = new Random();
+    private final SecureRandom random = new SecureRandom();
 
     @GetMapping
     @Operation(summary = "Listar todos los clientes", description = "Retorna de manera limpia la lista completa de clientes registrados en el sistema.")
@@ -46,13 +47,13 @@ public class ClienteController {
 
     @PostMapping
     @Operation(summary = "Registrar clientes", description = "Permite registrar un cliente enviando su JSON, o generar registros masivos aleatorios usando el parámetro 'cantidad'.")
-    public ResponseEntity<?> registrar(
+    public ResponseEntity<Object> registrar(
             @Parameter(description = "Cantidad opcional de clientes aleatorios a auto-generar", required = false, example = "5")
             @RequestParam(required = false) Integer cantidad,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
             @RequestBody(required = false) Cliente cliente) {
 
-        // Escenario A: Generación masiva aleatoria por parámetro para pruebas del Grupo 07
+
         if (cantidad != null && cantidad > 0) {
             log.info("Generando {} clientes aleatorios en el POST", cantidad);
 
@@ -72,16 +73,14 @@ public class ClienteController {
                 falso.setTelefono(telefonoSimulado);
                 falso.setEmail(emailSimulado);
 
-                // 💡 SOLUCIÓN: Inicializamos el Perfil de Riesgo con valores por defecto seguros
                 PerfilRiesgo perfilDefecto = new PerfilRiesgo();
                 perfilDefecto.setScoreCrediticio(650 + random.nextInt(150)); // Score entre 650 y 800
                 perfilDefecto.setNivelRiesgo("Bajo");
-                perfilDefecto.setFechaUltimaEvaluacion(LocalDate.now());
+                perfilDefecto.setFechaUltimaEvaluacion(LocalDate.now(ZoneId.of("America/Lima")));
                 falso.setPerfilRiesgo(perfilDefecto);
 
-                // 💡 SOLUCIÓN: Inicializamos el Historial Crediticio con valores por defecto seguros
                 HistorialCrediticio historialDefecto = new HistorialCrediticio();
-                historialDefecto.setNumeroCreditosActivos(random.nextInt(3)); // Entre 0 y 2 créditos activos
+                historialDefecto.setNumeroCreditosActivos(random.nextInt(3)); // Entre 0 y 2 creditos activos
                 historialDefecto.setTieneDeudasCastigadas(false); // Cliente limpio
                 falso.setHistorialCrediticio(historialDefecto);
 
@@ -92,7 +91,6 @@ public class ClienteController {
                     .body("Se generaron con éxito " + cantidad + " clientes aleatorios para pruebas.");
         }
 
-        // Escenario B: Registro individual manual clásico
         if (cliente != null) {
             log.info("Registrando un cliente individual de forma manual");
             return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.create(cliente));
@@ -121,7 +119,7 @@ public class ClienteController {
         return clienteService.getById(id)
                 .map(entidad -> {
                     clienteService.deleteById(id);
-                    return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+                    return ResponseEntity.noContent().<Void>build();
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

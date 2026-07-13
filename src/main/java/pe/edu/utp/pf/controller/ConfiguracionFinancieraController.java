@@ -19,7 +19,7 @@ public class ConfiguracionFinancieraController {
 
     private final ConfiguracionFinancieraService configService;
 
-    /**
+    /*
      * Recupera los parámetros globales vigentes del sistema.
      * Al ser un Singleton, siempre devuelve la misma y única instancia (ID 1).
      */
@@ -31,7 +31,7 @@ public class ConfiguracionFinancieraController {
         return ResponseEntity.ok(configService.getConfiguracionUnica());
     }
 
-    /**
+    /*
      * Modifica los valores de las tasas globales del negocio.
      */
     @PutMapping
@@ -43,7 +43,7 @@ public class ConfiguracionFinancieraController {
         return ResponseEntity.ok(configService.updateConfiguracion(nuevaConfig));
     }
 
-    /**
+    /*
      * Operación funcional experta (GRASP) expuesta directamente para simular o verificar
      * el costo de penalizaciones de cuotas vencidas sin alterar la base de datos.
      */
