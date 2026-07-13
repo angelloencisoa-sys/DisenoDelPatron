@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.utp.pf.dto.ClienteDTO;
 import pe.edu.utp.pf.model.Cliente;
 import pe.edu.utp.pf.model.HistorialCrediticio;
 import pe.edu.utp.pf.model.PerfilRiesgo;
@@ -51,8 +52,7 @@ public class ClienteController {
             @Parameter(description = "Cantidad opcional de clientes aleatorios a auto-generar", required = false, example = "5")
             @RequestParam(required = false) Integer cantidad,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
-            @RequestBody(required = false) Cliente cliente) {
-
+            @RequestBody(required = false) ClienteDTO clienteDTO) { // <--- Solución S4684: Uso de DTO
 
         if (cantidad != null && cantidad > 0) {
             log.info("Generando {} clientes aleatorios en el POST", cantidad);
@@ -74,14 +74,14 @@ public class ClienteController {
                 falso.setEmail(emailSimulado);
 
                 PerfilRiesgo perfilDefecto = new PerfilRiesgo();
-                perfilDefecto.setScoreCrediticio(650 + random.nextInt(150)); // Score entre 650 y 800
+                perfilDefecto.setScoreCrediticio(650 + random.nextInt(150));
                 perfilDefecto.setNivelRiesgo("Bajo");
                 perfilDefecto.setFechaUltimaEvaluacion(LocalDate.now(ZoneId.of("America/Lima")));
                 falso.setPerfilRiesgo(perfilDefecto);
 
                 HistorialCrediticio historialDefecto = new HistorialCrediticio();
-                historialDefecto.setNumeroCreditosActivos(random.nextInt(3)); // Entre 0 y 2 creditos activos
-                historialDefecto.setTieneDeudasCastigadas(false); // Cliente limpio
+                historialDefecto.setNumeroCreditosActivos(random.nextInt(3));
+                historialDefecto.setTieneDeudasCastigadas(false);
                 falso.setHistorialCrediticio(historialDefecto);
 
                 clienteService.create(falso);
@@ -91,12 +91,18 @@ public class ClienteController {
                     .body("Se generaron con éxito " + cantidad + " clientes aleatorios para pruebas.");
         }
 
-        if (cliente != null) {
+        if (clienteDTO != null) {
             log.info("Registrando un cliente individual de forma manual");
-            return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.create(cliente));
+
+            Cliente nuevoCliente = new Cliente();
+            nuevoCliente.setNombresCompletos(clienteDTO.getNombresCompletos());
+            nuevoCliente.setDireccion(clienteDTO.getDireccion());
+            nuevoCliente.setTelefono(clienteDTO.getTelefono());
+            nuevoCliente.setEmail(clienteDTO.getEmail());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.create(nuevoCliente));
         }
 
-        // Error si la petición llega totalmente vacía
         return ResponseEntity.badRequest().body("Debe enviar un objeto JSON o especificar una 'cantidad' para la generación.");
     }
 
@@ -105,9 +111,18 @@ public class ClienteController {
     public ResponseEntity<Cliente> actualizar(
             @Parameter(description = "ID del cliente a modificar", required = true, example = "1")
             @PathVariable Integer id,
-            @RequestBody Cliente cliente) {
+            @RequestBody ClienteDTO clienteDTO) { // <--- Solución S4684: Uso de DTO
         return clienteService.getById(id)
-                .map(old -> ResponseEntity.ok(clienteService.update(old, cliente)))
+                .map(old -> {
+                    // Mapeo selectivo sobre los campos editables de la entidad original
+                    Cliente datosModificados = new Cliente();
+                    datosModificados.setNombresCompletos(clienteDTO.getNombresCompletos());
+                    datosModificados.setDireccion(clienteDTO.getDireccion());
+                    datosModificados.setTelefono(clienteDTO.getTelefono());
+                    datosModificados.setEmail(clienteDTO.getEmail());
+
+                    return ResponseEntity.ok(clienteService.update(old, datosModificados));
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 

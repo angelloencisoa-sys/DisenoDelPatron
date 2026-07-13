@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.utp.pf.dto.SolicitudCreditoDTO;
 import pe.edu.utp.pf.model.AsesorFinanciero;
 import pe.edu.utp.pf.model.Cliente;
 import pe.edu.utp.pf.model.Credito;
@@ -20,7 +21,6 @@ import pe.edu.utp.pf.service.SolicitudCreditoService;
 import java.security.SecureRandom;
 import java.util.List;
 
-
 @Slf4j
 @RestController
 @RequestMapping("/api/solicitudes")
@@ -30,11 +30,8 @@ public class SolicitudCreditoController {
 
     private final SolicitudCreditoService solicitudService;
     private final CreditoService creditoService;
-
-
     private final ClienteService clienteService;
     private final AsesorFinancieroService asesorService;
-
     private final SecureRandom random = new SecureRandom();
 
     @GetMapping
@@ -50,7 +47,7 @@ public class SolicitudCreditoController {
             @Parameter(description = "Cantidad opcional de solicitudes aleatorias a auto-generar", required = false, example = "3")
             @RequestParam(required = false) Integer cantidad,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
-            @RequestBody(required = false) SolicitudCredito solicitud) {
+            @RequestBody(required = false) SolicitudCreditoDTO solicitudDTO) {
 
         if (cantidad != null && cantidad > 0) {
             log.info("Generando {} solicitudes de crédito aleatorias", cantidad);
@@ -67,11 +64,9 @@ public class SolicitudCreditoController {
             for (int i = 0; i < cantidad; i++) {
                 SolicitudCredito falsa = new SolicitudCredito();
 
-
-                falsa.setMontoSolicitado(1000.0 + (random.nextInt(18) * 500)); // Montos entre 1000 y 10000
-                falsa.setPlazoMeses((random.nextInt(4) + 1) * 6); // Plazos de 6, 12, 18 o 24 meses
+                falsa.setMontoSolicitado(1000.0 + (random.nextInt(18) * 500));
+                falsa.setPlazoMeses((random.nextInt(4) + 1) * 6);
                 falsa.setEstado(estadosPosibles[random.nextInt(estadosPosibles.length)]);
-
 
                 falsa.setCliente(clientesDisponibles.get(random.nextInt(clientesDisponibles.size())));
                 falsa.setAsesor(asesoresDisponibles.get(random.nextInt(asesoresDisponibles.size())));
@@ -82,11 +77,16 @@ public class SolicitudCreditoController {
                     .body("Se generaron con éxito " + cantidad + " solicitudes vinculadas correctamente en tu base de datos H2.");
         }
 
-
-        if (solicitud != null) {
+        if (solicitudDTO != null) {
             log.info("Registrando solicitud de crédito manual");
-            SolicitudCredito nuevaSolicitud = solicitudService.create(solicitud);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaSolicitud);
+
+            SolicitudCredito nuevaSolicitud = new SolicitudCredito();
+            nuevaSolicitud.setMontoSolicitado(solicitudDTO.getMontoSolicitado());
+            nuevaSolicitud.setPlazoMeses(solicitudDTO.getPlazoMeses());
+            nuevaSolicitud.setEstado(solicitudDTO.getEstado());
+
+            SolicitudCredito solicitudCreada = solicitudService.create(nuevaSolicitud);
+            return ResponseEntity.status(HttpStatus.CREATED).body(solicitudCreada);
         }
 
         return ResponseEntity.badRequest().body("Debe enviar un objeto JSON o especificar una 'cantidad' para la generación.");

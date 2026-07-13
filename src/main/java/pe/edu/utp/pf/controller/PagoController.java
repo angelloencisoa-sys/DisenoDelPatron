@@ -8,13 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.utp.pf.dto.PagoDTO;
 import pe.edu.utp.pf.model.Pago;
 import pe.edu.utp.pf.model.PagoEfectivo;
 import pe.edu.utp.pf.service.PagoService;
 
 import java.security.SecureRandom;
 import java.util.List;
-
 
 @Slf4j
 @RestController
@@ -49,7 +49,7 @@ public class PagoController {
             @Parameter(description = "Cantidad opcional de pagos aleatorios a auto-generar para pruebas", required = false, example = "5")
             @RequestParam(required = false) Integer cantidad,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
-            @RequestBody(required = false) Pago pago) {
+            @RequestBody(required = false) PagoDTO pagoDTO) {
 
         if (cantidad != null && cantidad > 0) {
             log.info("Generando {} transacciones de pago aleatorias", cantidad);
@@ -58,8 +58,7 @@ public class PagoController {
 
                 PagoEfectivo pagoFalso = new PagoEfectivo();
 
-
-                double montoAleatorio = 50.0 + (random.nextInt(10) * 20); // Entre 50 y 230 soles
+                double montoAleatorio = 50.0 + (random.nextInt(10) * 20);
                 pagoFalso.setMontoAbonado(montoAleatorio);
 
                 pagoService.create(pagoFalso);
@@ -68,9 +67,13 @@ public class PagoController {
                     .body("Se generaron con éxito " + cantidad + " registros de pago polimórficos en tu base de datos H2.");
         }
 
-        if (pago != null) {
+        if (pagoDTO != null) {
             log.info("Registrando un pago individual de forma manual");
-            return ResponseEntity.status(HttpStatus.CREATED).body(pagoService.create(pago));
+
+            PagoEfectivo nuevoPago = new PagoEfectivo();
+            nuevoPago.setMontoAbonado(pagoDTO.getMontoAbonado());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(pagoService.create(nuevoPago));
         }
 
         return ResponseEntity.badRequest().body("Debe enviar un objeto JSON de pago o especificar una 'cantidad' para la generación.");
@@ -81,9 +84,14 @@ public class PagoController {
     public ResponseEntity<Pago> actualizarPago(
             @Parameter(description = "ID del pago a modificar", required = true, example = "1")
             @PathVariable Integer id,
-            @RequestBody Pago pago) {
+            @RequestBody PagoDTO pagoDTO) {
         return pagoService.getById(id)
-                .map(old -> ResponseEntity.ok(pagoService.update(old, pago)))
+                .map(old -> {
+                    PagoEfectivo datosModificados = new PagoEfectivo();
+                    datosModificados.setMontoAbonado(pagoDTO.getMontoAbonado());
+
+                    return ResponseEntity.ok(pagoService.update(old, datosModificados));
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 

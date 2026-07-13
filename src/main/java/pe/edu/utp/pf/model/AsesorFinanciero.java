@@ -1,6 +1,6 @@
 package pe.edu.utp.pf.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // 👈 Aseguren esta importación
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties({"solicitudes"}) // 👈 SOLUCIÓN: Evita leer las solicitudes en diferido y elimina el Lazy Error
+@JsonIgnoreProperties({"solicitudes"})
 public class AsesorFinanciero {
 
     @Id

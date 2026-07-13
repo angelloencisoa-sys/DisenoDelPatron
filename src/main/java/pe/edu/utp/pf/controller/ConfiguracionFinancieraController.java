@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.utp.pf.dto.ConfiguracionFinancieraDTO;
 import pe.edu.utp.pf.model.ConfiguracionFinanciera;
 import pe.edu.utp.pf.service.ConfiguracionFinancieraService;
 
@@ -38,8 +39,14 @@ public class ConfiguracionFinancieraController {
     @Operation(summary = "Actualizar parámetros globales",
             description = "Modifica los porcentajes de IGV, moras o tasas máximas, impactando de inmediato en los nuevos cálculos del sistema.")
     public ResponseEntity<ConfiguracionFinanciera> actualizarConfiguracion(
-            @RequestBody ConfiguracionFinanciera nuevaConfig) {
+            @RequestBody ConfiguracionFinancieraDTO nuevaConfigDTO) {
         log.info("Solicitud REST para actualizar los valores del Singleton financiero");
+
+        ConfiguracionFinanciera nuevaConfig = new ConfiguracionFinanciera();
+        nuevaConfig.setPorcentajeMoraDiaria(nuevaConfigDTO.getTasaMoraDiaria());
+        nuevaConfig.setIgv(nuevaConfigDTO.getPorcentajeIgv());
+        nuevaConfig.setTasaInteresMaximaLegal(nuevaConfigDTO.getTasaInteresMaxima());
+
         return ResponseEntity.ok(configService.updateConfiguracion(nuevaConfig));
     }
 

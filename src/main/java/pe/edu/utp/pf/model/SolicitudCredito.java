@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pe.edu.utp.pf.service.patron.prototype.Contrato;
 
+
 /**
  * Entidad central que representa el expediente o solicitud formal de financiamiento
  * registrada por un cliente y evaluada por la institución.
@@ -41,7 +42,7 @@ public class SolicitudCredito {
     /**
      * Asesor financiero asignado para el estudio y seguimiento de este expediente.
      */
-    @JsonIgnoreProperties("solicitudes") // 👈 SOLUCIÓN: Rompe el bucle con Asesor
+    @JsonIgnoreProperties("solicitudes")
     @ManyToOne
     @JoinColumn(name = "asesor_id")
     private AsesorFinanciero asesor;

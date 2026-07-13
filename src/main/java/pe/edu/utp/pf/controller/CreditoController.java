@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.utp.pf.dto.CreditoDTO;
 import pe.edu.utp.pf.model.Credito;
 import pe.edu.utp.pf.service.CreditoService;
 
@@ -15,8 +16,6 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 
 @Slf4j
 @RestController
@@ -51,7 +50,7 @@ public class CreditoController {
             @Parameter(description = "Cantidad opcional de créditos aleatorios a auto-generar para pruebas", required = false, example = "3")
             @RequestParam(required = false) Integer cantidad,
             @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
-            @RequestBody(required = false) Credito credito) {
+            @RequestBody(required = false) CreditoDTO creditoDTO) {
 
 
         if (cantidad != null && cantidad > 0) {
@@ -61,9 +60,10 @@ public class CreditoController {
 
             for (int i = 0; i < cantidad; i++) {
                 Credito falso = new Credito();
-                falso.setCapitalPrestado(2000.0 + (random.nextInt(16) * 500)); // Montos entre 2000 y 10000 soles
-                falso.setTasaInteresAnual(12.5 + random.nextInt(5)); // Tasas entre 12.5% y 16.5%
-                falso.setFechaDesembolso(LocalDate.now(ZoneId.of("America/Lima")).minusDays(ThreadLocalRandom.current().nextInt(15)));
+                falso.setCapitalPrestado(2000.0 + (random.nextInt(16) * 500));
+                falso.setTasaInteresAnual(12.5 + random.nextInt(5));
+                falso.setFechaDesembolso(LocalDate.now(ZoneId.of("America/Lima"))
+                        .minusDays(random.nextInt(15)));
                 falso.setEstadoCredito(estadosValidos[random.nextInt(estadosValidos.length)]);
 
                 falso.setContrato(null);
@@ -77,9 +77,16 @@ public class CreditoController {
         }
 
 
-        if (credito != null) {
+        if (creditoDTO != null) {
             log.info("Procesando desembolso de crédito individual manual");
-            return ResponseEntity.status(HttpStatus.CREATED).body(creditoService.create(credito));
+
+            Credito nuevoCredito = new Credito();
+            nuevoCredito.setCapitalPrestado(creditoDTO.getCapitalPrestado());
+            nuevoCredito.setTasaInteresAnual(creditoDTO.getTasaInteresAnual());
+            nuevoCredito.setEstadoCredito(creditoDTO.getEstadoCredito());
+            nuevoCredito.setFechaDesembolso(LocalDate.now(ZoneId.of("America/Lima")));
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(creditoService.create(nuevoCredito));
         }
 
         return ResponseEntity.badRequest().body("Debe enviar un objeto JSON de crédito o especificar una 'cantidad' para la generación.");
@@ -90,9 +97,16 @@ public class CreditoController {
     public ResponseEntity<Credito> actualizarCredito(
             @Parameter(description = "ID del crédito a modificar", required = true, example = "1")
             @PathVariable Integer id,
-            @RequestBody Credito credito) {
+            @RequestBody CreditoDTO creditoDTO) {
         return creditoService.getById(id)
-                .map(old -> ResponseEntity.ok(creditoService.update(old, credito)))
+                .map(old -> {
+                    Credito datosModificados = new Credito();
+                    datosModificados.setCapitalPrestado(creditoDTO.getCapitalPrestado());
+                    datosModificados.setTasaInteresAnual(creditoDTO.getTasaInteresAnual());
+                    datosModificados.setEstadoCredito(creditoDTO.getEstadoCredito());
+
+                    return ResponseEntity.ok(creditoService.update(old, datosModificados));
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 

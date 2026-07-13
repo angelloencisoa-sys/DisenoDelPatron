@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.utp.pf.dto.AsesorFinancieroDTO;
 import pe.edu.utp.pf.model.AsesorFinanciero;
 import pe.edu.utp.pf.service.AsesorFinancieroService;
 
@@ -40,19 +41,23 @@ public class AsesorFinancieroController {
     }
 
     @PostMapping
-    @Operation(summary = "Registrar asesores", description = "Permite registrar un asesor enviando su JSON, o generar registros masivos aleatorios usando el parámetro 'cantidad'.")
-    public ResponseEntity<Object> registrar(
-            @Parameter(description = "Cantidad opcional de asesores aleatorios a auto-generar", required = false, example = "5")
+    @Operation(summary = "Registrar asesores")
+    public ResponseEntity<Object> registrarAsesor(
             @RequestParam(required = false) Integer cantidad,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(required = false)
-            @RequestBody(required = false) AsesorFinanciero asesor) {
+            @RequestBody(required = false) AsesorFinancieroDTO asesorDTO) {
 
-        if (asesor != null) {
+        if (asesorDTO != null) {
             log.info("Registrando un asesor financiero individual de forma manual");
+
+            // Mapear manualmente (o usar ModelMapper/MapStruct) el DTO a la Entidad
+            AsesorFinanciero asesor = new AsesorFinanciero();
+            asesor.setNombreAsesor(asesorDTO.getNombreAsesor());
+            asesor.setCodigoAgencia(asesorDTO.getCodigoAgencia());
+
             return ResponseEntity.status(HttpStatus.CREATED).body(asesorService.create(asesor));
         }
 
-        return ResponseEntity.badRequest().body("Debe enviar un objeto JSON o especificar una 'cantidad' para la generación.");
+        return ResponseEntity.badRequest().body("Debe enviar un objeto JSON o especificar una 'cantidad'.");
     }
 
     @PutMapping("/{id}")
@@ -60,9 +65,15 @@ public class AsesorFinancieroController {
     public ResponseEntity<AsesorFinanciero> actualizar(
             @Parameter(description = "ID del asesor a modificar", required = true, example = "1")
             @PathVariable Integer id,
-            @RequestBody AsesorFinanciero asesor) {
+            @RequestBody AsesorFinancieroDTO asesorDTO) { // <--- Solución S4684: Uso de DTO
         return asesorService.getById(id)
-                .map(old -> ResponseEntity.ok(asesorService.update(old, asesor)))
+                .map(old -> {
+                    AsesorFinanciero datosModificados = new AsesorFinanciero();
+                    datosModificados.setNombreAsesor(asesorDTO.getNombreAsesor());
+                    datosModificados.setCodigoAgencia(asesorDTO.getCodigoAgencia());
+
+                    return ResponseEntity.ok(asesorService.update(old, datosModificados));
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 
