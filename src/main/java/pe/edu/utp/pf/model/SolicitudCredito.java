@@ -1,5 +1,6 @@
 package pe.edu.utp.pf.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,31 +22,18 @@ import pe.edu.utp.pf.service.patron.prototype.Contrato;
 @Setter
 public class SolicitudCredito {
 
-    /**
-     * Identificador único de la solicitud de crédito.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSolicitud;
 
-    /**
-     * Cantidad de dinero total que el cliente solicita en préstamo.
-     */
     private Double montoSolicitado;
-
-    /**
-     * Periodo de tiempo en meses solicitado para amortizar la deuda.
-     */
     private Integer plazoMeses;
-
-    /**
-     * Estado actual del trámite.
-     */
     private String estado;
 
     /**
      * Cliente titular que realiza la postulación al crédito.
      */
+    @JsonIgnoreProperties("solicitudes") // 👈 SOLUCIÓN: Rompe el bucle con Cliente
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
@@ -53,27 +41,19 @@ public class SolicitudCredito {
     /**
      * Asesor financiero asignado para el estudio y seguimiento de este expediente.
      */
+    @JsonIgnoreProperties("solicitudes") // 👈 SOLUCIÓN: Rompe el bucle con Asesor
     @ManyToOne
     @JoinColumn(name = "asesor_id")
     private AsesorFinanciero asesor;
 
-    /**
-     * Informe técnico de evaluación de riesgos asociado a esta solicitud.
-     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "evaluacion_id")
     private EvaluacionRiesgo evaluacion;
 
-    /**
-     * Bien o aval registrado en el sistema como resguardo de la operación.
-     */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "garantia_id")
     private Garantia garantia;
 
-    /**
-     * Contrato legal generado una vez que la solicitud pasa a estado aprobado.
-     */
     @OneToOne(mappedBy = "solicitud")
     private Contrato contrato;
 }

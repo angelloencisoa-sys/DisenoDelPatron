@@ -34,8 +34,15 @@ public class ConfiguracionFinancieraServiceImpl implements ConfiguracionFinancie
                 instanciaMemoria.setIgv(dbValue.getIgv());
             } else {
                 log.info("Primera ejecucion: Guardando valores por defecto del Singleton en la BD.");
-                instanciaMemoria.setIdConfiguracion(1); // Forzar ID 1 para el registro único
-                repo.save(instanciaMemoria);
+
+                // 💡 SOLUCIÓN DEFINITIVA: Creamos un clon limpio sin ID para entregárselo a Hibernate.
+                // Al ir el ID vacío (null), H2 aceptará la inserción y le asignará el ID 1 de forma natural.
+                ConfiguracionFinanciera nuevaConfigDb = new ConfiguracionFinanciera();
+                nuevaConfigDb.setTasaInteresMaximaLegal(instanciaMemoria.getTasaInteresMaximaLegal());
+                nuevaConfigDb.setPorcentajeMoraDiaria(instanciaMemoria.getPorcentajeMoraDiaria());
+                nuevaConfigDb.setIgv(instanciaMemoria.getIgv());
+
+                repo.save(nuevaConfigDb);
             }
             return instanciaMemoria;
         } catch (DataAccessException e) {

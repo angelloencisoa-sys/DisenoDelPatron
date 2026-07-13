@@ -1,47 +1,28 @@
 package pe.edu.utp.pf.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties; // 👈 Aseguren esta importación
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
-/**
- * Representa al personal de la entidad financiera encargado de la gestión,
- * evaluación y seguimiento de las solicitudes de microcréditos.
- *
- * @author Grupo 07
- * @version 2.0
- */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties({"solicitudes"}) // 👈 SOLUCIÓN: Evita leer las solicitudes en diferido y elimina el Lazy Error
 public class AsesorFinanciero {
 
-    /**
-     * Identificador único autoincremental del asesor en la base de datos.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAsesor;
 
-    /**
-     * Nombre completo del asesor financiero.
-     */
     private String nombreAsesor;
-
-    /**
-     * Código identificador de la agencia o sucursal a la que pertenece el asesor.
-     */
     private String codigoAgencia;
 
-    /**
-     * Lista de solicitudes de crédito asignadas a este asesor para su evaluación.
-     */
     @OneToMany(mappedBy = "asesor")
     private List<SolicitudCredito> solicitudes;
 }

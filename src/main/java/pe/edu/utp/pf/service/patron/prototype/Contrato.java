@@ -1,5 +1,6 @@
 package pe.edu.utp.pf.service.patron.prototype;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,9 +52,14 @@ public class Contrato {
     /**
      * Expediente de la solicitud origen que desencadenó la generación de este contrato.
      */
+    /**
+     * Expediente de la solicitud origen que desencadenó la generación de este contrato.
+     */
+    @JsonIgnoreProperties({"contrato", "cliente", "asesor", "evaluacion", "garantia"}) // 👈 AGREGA ESTO AQUÍ
     @OneToOne
     @JoinColumn(name = "solicitud_id")
     private SolicitudCredito solicitud;
+
 
 
     /**
