@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.utp.pf.exception.ServiceException;
 import pe.edu.utp.pf.model.SolicitudCredito;
 import pe.edu.utp.pf.repository.ContratoRepository;
+import pe.edu.utp.pf.repository.SolicitudCreditoRepository;
 import pe.edu.utp.pf.service.ContratoService;
 import pe.edu.utp.pf.service.patron.prototype.Contrato;
 import pe.edu.utp.pf.service.patron.prototype.GestorContrato;
@@ -25,9 +26,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ContratoServiceImpl implements ContratoService {
 
-    private ContratoRepository repo;
-
-    private GestorContrato gestorContrato;
+    private final ContratoRepository repo;
+    private final SolicitudCreditoRepository solicitudRepo;
+    private GestorContrato gestorContrato= new GestorContrato();
 
     /**
      * Recupera un contrato existente a partir de su identificador.
@@ -69,14 +70,15 @@ public class ContratoServiceImpl implements ContratoService {
     public Contrato generarContratoDesdePlantilla(String tipoContrato, Integer idSolicitud) {
         try {
 
+            SolicitudCredito solicitudDb = solicitudRepo.findById(idSolicitud)
+                    .orElseThrow(() -> new ServiceException(
+                            "No existe la solicitud de crédito con el ID proporcionado: " + idSolicitud, null));
+
             Contrato nuevoContrato = gestorContrato.obtenerContrato(tipoContrato);
             nuevoContrato.clonar();
 
 
-            SolicitudCredito solicitud = new SolicitudCredito();
-            solicitud.setIdSolicitud(idSolicitud);
-
-            nuevoContrato.setSolicitud(solicitud);
+            nuevoContrato.setSolicitud(solicitudDb);
             nuevoContrato.setFechaFirma(LocalDate.now(java.time.ZoneId.of("America/Lima")));
 
             Contrato contratoGuardado = repo.save(nuevoContrato);
