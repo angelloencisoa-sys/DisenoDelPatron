@@ -53,9 +53,7 @@ public class ContratoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(contratoClonado));
     }
 
-    // ==========================================
-    // METODOS DE CONVERSIÓN (Mappers manuales)
-    // ==========================================
+   //hola
 
     private ContratoDTO convertToDTO(Contrato entity) {
         if (entity == null) {
