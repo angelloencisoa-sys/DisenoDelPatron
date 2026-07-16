@@ -23,9 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test Controller para ConfiguracionFinancieraController
  * Prueba la gestión de parámetros globales financieros utilizando DTOs bajo Spring Boot 4.x
- *
- * @author Grupo 07
- * @version 3.1
  */
 @WebMvcTest(ConfiguracionFinancieraController.class)
 class ConfiguracionFinancieraControllerTest {
@@ -36,7 +33,6 @@ class ConfiguracionFinancieraControllerTest {
     @MockitoBean
     private ConfiguracionFinancieraService configuracionService;
 
-    // Se instancia directamente para evitar el fallo de inyección en el contexto de WebMvcTest
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private ConfiguracionFinanciera configuracion;
@@ -68,6 +64,19 @@ class ConfiguracionFinancieraControllerTest {
         verify(configuracionService, times(1)).getConfiguracionUnica();
     }
 
+    @DisplayName("GET /api/configuraciones - Retorna cuerpo vacío si la configuración es nula")
+    @Test
+    void controller_Get_ObtenerConfiguracionGlobalNula() throws Exception {
+        when(configuracionService.getConfiguracionUnica()).thenReturn(null);
+
+        mockMvc.perform(get("/api/configuraciones")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
+
+        verify(configuracionService, times(1)).getConfiguracionUnica();
+    }
+
     @DisplayName("PUT /api/configuraciones - Actualizar configuración global")
     @Test
     void controller_Put_ActualizarConfiguracionGlobal() throws Exception {
@@ -87,6 +96,17 @@ class ConfiguracionFinancieraControllerTest {
                 .andExpect(jsonPath("$.tasaInteresMaximaLegal").value(40.0));
 
         verify(configuracionService, times(1)).updateConfiguracion(any(ConfiguracionFinanciera.class));
+    }
+
+    @DisplayName("PUT /api/configuraciones - Envío de payload nulo o vacío")
+    @Test
+    void controller_Put_ActualizarConfiguracionConNullBody() throws Exception {
+        when(configuracionService.updateConfiguracion(null)).thenReturn(null);
+
+        mockMvc.perform(put("/api/configuraciones")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(""))
+                .andExpect(status().isBadRequest());
     }
 
     @DisplayName("GET /api/configuraciones/calcular-mora - Calcular mora por retraso")

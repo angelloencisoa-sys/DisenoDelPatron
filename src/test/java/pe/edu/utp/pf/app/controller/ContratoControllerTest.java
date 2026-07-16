@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pe.edu.utp.pf.controller.ContratoController;
+import pe.edu.utp.pf.model.SolicitudCredito;
 import pe.edu.utp.pf.service.ContratoService;
 import pe.edu.utp.pf.service.patron.prototype.Contrato;
 
@@ -24,9 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test Controller para ContratoController
  * Prueba la funcionalidad del patrón Prototype para generación de contratos bajo Spring Boot 4.x
- *
- * @author Grupo 07
- * @version 3.1
  */
 @WebMvcTest(ContratoController.class)
 class ContratoControllerTest {
@@ -36,7 +34,6 @@ class ContratoControllerTest {
 
     @MockitoBean
     private ContratoService contratoService;
-
 
     private Contrato contrato;
 
@@ -49,18 +46,48 @@ class ContratoControllerTest {
         contrato.setClausulasExtras("Cláusula de garantía estándar");
     }
 
-    @DisplayName("GET /api/contratos/{id} - Obtener contrato por ID")
+    @DisplayName("GET /api/contratos/{id} - Obtener contrato por ID sin solicitud asociada")
     @Test
-    void controller_GetById_ReturnsContrato() throws Exception {
+    void controller_GetById_ReturnsContratoSinSolicitud() throws Exception {
         when(contratoService.getById(1)).thenReturn(Optional.of(contrato));
 
         mockMvc.perform(get("/api/contratos/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idContrato").value(1))
-                .andExpect(jsonPath("$.tipo").value("Consumo"));
+                .andExpect(jsonPath("$.tipo").value("Consumo"))
+                .andExpect(jsonPath("$.idSolicitud").value(org.hamcrest.Matchers.nullValue()));
 
         verify(contratoService, times(1)).getById(1);
+    }
+
+    @DisplayName("GET /api/contratos/{id} - Obtener contrato por ID con solicitud asociada")
+    @Test
+    void controller_GetById_ReturnsContratoConSolicitud() throws Exception {
+        // Configuramos una solicitud de crédito simulada en el contrato
+        SolicitudCredito solicitud = new SolicitudCredito();
+        solicitud.setIdSolicitud(15);
+        contrato.setSolicitud(solicitud);
+
+        when(contratoService.getById(1)).thenReturn(Optional.of(contrato));
+
+        mockMvc.perform(get("/api/contratos/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idContrato").value(1))
+                .andExpect(jsonPath("$.idSolicitud").value(15));
+
+        verify(contratoService, times(1)).getById(1);
+    }
+
+    @DisplayName("GET /api/contratos/{id} - Retorna nulo si el opcional contiene un valor nulo")
+    @Test
+    void controller_GetById_ReturnsNullWhenEntityIsNull() throws Exception {
+        when(contratoService.getById(1)).thenReturn(Optional.ofNullable(null));
+
+        mockMvc.perform(get("/api/contratos/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @DisplayName("GET /api/contratos/{id} - Contrato no encontrado")

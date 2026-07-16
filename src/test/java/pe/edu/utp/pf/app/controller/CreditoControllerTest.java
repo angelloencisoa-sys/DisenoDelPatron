@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Prueba la funcionalidad de la gestión del ciclo de vida de los créditos bajo Spring Boot 4.x
  *
  * @author Grupo 07
- * @version 3.1
+ * @version 3.2
  */
 @WebMvcTest(CreditoController.class)
 class CreditoControllerTest {
@@ -106,7 +106,7 @@ class CreditoControllerTest {
         verify(creditoService, times(1)).getById(99);
     }
 
-    @DisplayName("POST /api/creditos - Registrar nuevo crédito")
+    @DisplayName("POST /api/creditos - Registrar nuevo crédito individual manualmente")
     @Test
     void controller_Post_RegistrarCredito() throws Exception {
         when(creditoService.create(any(Credito.class))).thenReturn(creditoGuardado);
@@ -120,22 +120,39 @@ class CreditoControllerTest {
         verify(creditoService, times(1)).create(any(Credito.class));
     }
 
-    @DisplayName("POST /api/creditos - Sin datos en el cuerpo retorna error")
+    @DisplayName("POST /api/creditos?cantidad=X - Generación masiva aleatoria de créditos")
+    @Test
+    void controller_Post_GenerarCreditosAleatorios() throws Exception {
+        // Simulamos la creación exitosa de un crédito cuando el bucle for llame a create()
+        when(creditoService.create(any(Credito.class))).thenReturn(creditoGuardado);
+
+        mockMvc.perform(post("/api/creditos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("cantidad", "3"))
+                .andExpect(status().isCreated())
+                .andExpect(content().string("Se generaron con éxito 3 créditos de prueba. Verifícalos en el GET para observar sus cronogramas auto-creados."));
+
+        // Se verifica que se invocó el método 'create' las 3 veces especificadas en 'cantidad'
+        verify(creditoService, times(3)).create(any(Credito.class));
+    }
+
+    @DisplayName("POST /api/creditos - Sin datos ni cantidad retorna error BadRequest")
     @Test
     void controller_Post_SinDatosRetornaError() throws Exception {
         mockMvc.perform(post("/api/creditos")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Debe enviar un objeto JSON de crédito o especificar una 'cantidad' para la generación."));
     }
 
-    @DisplayName("PUT /api/creditos/{id} - Actualizar estado o datos de crédito")
+    @DisplayName("PUT /api/creditos/{id} - Actualizar condiciones de un crédito")
     @Test
     void controller_Put_ActualizarCredito() throws Exception {
         Credito creditoActualizado = new Credito();
         creditoActualizado.setIdCredito(1);
         creditoActualizado.setCapitalPrestado(5000.0);
         creditoActualizado.setTasaInteresAnual(14.5);
-        creditoActualizado.setEstadoCredito("Cancelado"); // Cambió de Vigente a Cancelado
+        creditoActualizado.setEstadoCredito("Cancelado");
 
         when(creditoService.getById(1)).thenReturn(Optional.of(creditoGuardado));
         when(creditoService.update(any(Credito.class), any(Credito.class)))
@@ -149,5 +166,46 @@ class CreditoControllerTest {
 
         verify(creditoService, times(1)).getById(1);
         verify(creditoService, times(1)).update(any(Credito.class), any(Credito.class));
+    }
+
+    @DisplayName("PUT /api/creditos/{id} - Crédito a actualizar no existe")
+    @Test
+    void controller_Put_ActualizarCreditoInexistente() throws Exception {
+        when(creditoService.getById(99)).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/api/creditos/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(creditoDTO)))
+                .andExpect(status().isNotFound());
+
+        verify(creditoService, times(1)).getById(99);
+        verify(creditoService, never()).update(any(Credito.class), any(Credito.class));
+    }
+
+    @DisplayName("DELETE /api/creditos/{id} - Eliminar un crédito existente")
+    @Test
+    void controller_Delete_EliminarCreditoExistente() throws Exception {
+        when(creditoService.getById(1)).thenReturn(Optional.of(creditoGuardado));
+        doNothing().when(creditoService).deleteById(1);
+
+        mockMvc.perform(delete("/api/creditos/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(creditoService, times(1)).getById(1);
+        verify(creditoService, times(1)).deleteById(1);
+    }
+
+    @DisplayName("DELETE /api/creditos/{id} - Intentar eliminar crédito inexistente")
+    @Test
+    void controller_Delete_CreditoInexistente() throws Exception {
+        when(creditoService.getById(99)).thenReturn(Optional.empty());
+
+        mockMvc.perform(delete("/api/creditos/99")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(creditoService, times(1)).getById(99);
+        verify(creditoService, never()).deleteById(99);
     }
 }
