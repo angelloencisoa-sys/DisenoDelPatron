@@ -43,7 +43,6 @@ class IContratoServiceTest {
 
     private Contrato contrato;
     private Contrato saveContrato;
-    private SolicitudCredito solicitud;
     private SolicitudCredito saveSolicitud;
 
     @BeforeEach
