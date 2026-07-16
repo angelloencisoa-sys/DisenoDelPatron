@@ -26,7 +26,7 @@ import pe.edu.utp.pf.service.impl.SolicitudCreditoServiceImpl;
  * @version 2.0
  */
 @ExtendWith(MockitoExtension.class)
-class SolicitudCreditoServiceTest {
+class ISolicitudCreditoServiceTest {
 
     @Mock
     private SolicitudCreditoRepository repoMock;
