@@ -76,23 +76,5 @@ public class ContratoController {
         );
     }
 
-    private Contrato convertToEntity(ContratoDTO dto) {
-        if (dto == null) {
-            return null;
-        }
 
-        Contrato entity = new Contrato();
-        entity.setIdContrato(dto.getIdContrato());
-        entity.setFechaFirma(dto.getFechaFirma());
-        entity.setClausulasExtras(dto.getClausulasExtras());
-        entity.setTipo(dto.getTipo());
-
-        if (dto.getIdSolicitud() != null) {
-            SolicitudCredito solicitud = new SolicitudCredito();
-            solicitud.setIdSolicitud(dto.getIdSolicitud());
-            entity.setSolicitud(solicitud);
-        }
-
-        return entity;
-    }
 }

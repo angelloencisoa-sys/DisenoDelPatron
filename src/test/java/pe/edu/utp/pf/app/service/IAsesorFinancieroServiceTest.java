@@ -94,8 +94,8 @@ class IAsesorFinancieroServiceTest {
         when(this.repoMock.findAll()).thenReturn(asesorList);
         List<AsesorFinanciero> list = this.serviceMock.getAll();
 
-        assertThat(list.size()).isGreaterThan(1);
-        assertThat(list).contains(saveAsesor, asesor);
+        assertThat(list).hasSizeGreaterThan(1).contains(saveAsesor, asesor);
+
     }
 
     @DisplayName("Service - Buscar y retornar por Id un Asesor")
