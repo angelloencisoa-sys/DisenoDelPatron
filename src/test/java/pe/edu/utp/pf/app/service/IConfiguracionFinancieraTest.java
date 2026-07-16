@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -125,8 +126,7 @@ class IConfiguracionFinancieraTest {
         }
 
         // 3. Comparación
-        assertThat(mora).isNotNull();
-        assertThat(mora).isEqualTo(25.0);
+        assertThat(mora).isNotNull().isEqualTo(25.0);
     }
 
     @DisplayName("Service - Calcular mora con valores nulos")

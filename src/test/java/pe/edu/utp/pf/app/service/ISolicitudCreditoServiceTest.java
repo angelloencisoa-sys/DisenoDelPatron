@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -97,8 +98,7 @@ class ISolicitudCreditoServiceTest {
         when(this.repoMock.findAll()).thenReturn(solicitudList);
         List<SolicitudCredito> list = this.serviceMock.getAll();
 
-        assertThat(list.size()).isGreaterThan(1);
-        assertThat(list).contains(saveSolicitud, solicitud);
+        assertThat(list).hasSizeGreaterThan(1).contains(saveSolicitud, solicitud);
     }
 
     @DisplayName("Service - Buscar y retornar por Id una Solicitud")
@@ -124,7 +124,7 @@ class ISolicitudCreditoServiceTest {
 
         try {
             solicitudWithId = this.serviceMock.getById(1);
-            assertThat(solicitudWithId.isEmpty()).isTrue();
+            assertThat(solicitudWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -138,7 +138,7 @@ class ISolicitudCreditoServiceTest {
 
         try {
             solicitudWithId = this.serviceMock.getById(1);
-            assertThat(solicitudWithId.isEmpty()).isTrue();
+            assertThat(solicitudWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -169,7 +169,7 @@ class ISolicitudCreditoServiceTest {
     void service_Delete_SuccessfulDeletion() {
         try {
             this.serviceMock.deleteById(1);
-            assertThat(true).isTrue();
+            assertTrue(true);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }

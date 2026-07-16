@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -113,8 +114,7 @@ class IClienteServiceTest {
         when(this.repoMock.findAll()).thenReturn(clienteList);
         List<Cliente> list = this.serviceMock.getAll();
 
-        assertThat(list.size()).isGreaterThan(1);
-        assertThat(list).contains(saveCliente, cliente);
+        assertThat(list).hasSizeGreaterThan(1).contains(saveCliente, cliente);
     }
 
     @DisplayName("Service - Buscar y retornar por Id un Cliente")
@@ -140,7 +140,7 @@ class IClienteServiceTest {
 
         try {
             clienteWithId = this.serviceMock.getById(1);
-            assertThat(clienteWithId.isEmpty()).isTrue();
+            assertThat(clienteWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -154,7 +154,7 @@ class IClienteServiceTest {
 
         try {
             clienteWithId = this.serviceMock.getById(1);
-            assertThat(clienteWithId.isEmpty()).isTrue();
+            assertThat(clienteWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -181,7 +181,7 @@ class IClienteServiceTest {
         try {
             this.serviceMock.deleteById(1);
             // Si no lanza excepción, la prueba pasa
-            assertThat(true).isTrue();
+            assertTrue(true);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
