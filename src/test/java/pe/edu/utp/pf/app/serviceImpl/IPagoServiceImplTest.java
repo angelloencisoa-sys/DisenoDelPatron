@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.serviceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -22,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataRetrievalFailureException;
 
 
+import pe.edu.utp.pf.exception.ServiceException;
 import pe.edu.utp.pf.model.Pago;
 import pe.edu.utp.pf.model.PagoEfectivo;
 import pe.edu.utp.pf.repository.PagoRepository;
@@ -79,13 +81,11 @@ class IPagoServiceImplTest {
     @DisplayName("PagoServiceImpl - Crear Pago maneja excepción")
     @Test
     void testCreate_HandleException() {
-        when(this.repoMock.save(any())).thenThrow(RuntimeException.class);
+        // CORRECCIÓN: Usar una excepción hija de DataAccessException
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
 
-        try {
-            this.serviceMock.create(pago);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        // Tu servicio captura DataAccessException y lanza ServiceException
+        assertThrows(ServiceException.class, () -> this.serviceMock.create(pago));
     }
 
     @DisplayName("PagoServiceImpl - Obtener todos los Pagos")
@@ -95,6 +95,15 @@ class IPagoServiceImplTest {
         var result = this.serviceMock.getAll();
 
         assertThat(result).isNotNull().hasSize(2);
+    }
+
+    @DisplayName("PagoServiceImpl - Obtener todos los Pagos maneja excepción")
+    @Test
+    void testGetAll_HandleException() {
+        when(this.repoMock.findAll()).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+        var result = this.serviceMock.getAll();
+
+        assertThat(result).isNotNull().isEmpty();
     }
 
     @DisplayName("PagoServiceImpl - Obtener Pago por ID")
@@ -140,6 +149,15 @@ class IPagoServiceImplTest {
         assertThat(result.getIdPago()).isEqualTo(1);
     }
 
+    @DisplayName("PagoServiceImpl - Actualizar Pago maneja excepción")
+    @Test
+    void testUpdate_HandleException() {
+        PagoEfectivo pagoModificado = new PagoEfectivo();
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.update(savePago, pagoModificado));
+    }
+
     @DisplayName("PagoServiceImpl - Eliminar Pago")
     @Test
     void testDeleteById_Success() {
@@ -154,12 +172,10 @@ class IPagoServiceImplTest {
     @DisplayName("PagoServiceImpl - Eliminar Pago maneja excepción")
     @Test
     void testDeleteById_HandleException() {
-        doThrow(RuntimeException.class).when(this.repoMock).deleteById(anyInt());
 
-        try {
-            this.serviceMock.deleteById(1);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        doThrow(new DataRetrievalFailureException("Error simulado BD")).when(this.repoMock).deleteById(anyInt());
+
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.deleteById(1));
     }
 }
