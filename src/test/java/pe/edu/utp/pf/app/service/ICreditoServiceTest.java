@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import pe.edu.utp.pf.model.Credito;
+import pe.edu.utp.pf.model.Cronograma;
 import pe.edu.utp.pf.repository.CreditoRepository;
 import pe.edu.utp.pf.service.impl.CreditoServiceImpl;
 
@@ -56,6 +57,13 @@ class ICreditoServiceTest {
         saveCredito.setTasaInteresAnual(12.5);
         saveCredito.setEstadoCredito("Vigente");
         saveCredito.setFechaDesembolso(LocalDate.now(ZoneId.of("America/Lima")));
+
+        // Configurar cronograma para el crédito guardado
+        Cronograma cronograma = new Cronograma();
+        cronograma.setIdCronograma(1);
+        cronograma.setFechaGeneracion(LocalDate.now(ZoneId.of("America/Lima")));
+        cronograma.setCredito(saveCredito);
+        saveCredito.setCronograma(cronograma);
 
         creditoList = List.of(credito, saveCredito);
     }
