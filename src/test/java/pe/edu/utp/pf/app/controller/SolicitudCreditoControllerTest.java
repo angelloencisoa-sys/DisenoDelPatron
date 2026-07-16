@@ -143,6 +143,20 @@ class SolicitudCreditoControllerTest {
         verify(solicitudService, times(3)).create(any(SolicitudCredito.class));
     }
 
+    @DisplayName("POST /api/solicitudes?cantidad=0 - Cantidad igual a cero no genera aleatorias y evalúa el DTO")
+    @Test
+    void controller_Post_GenerarSolicitudesCantidadCero() throws Exception {
+        // Al enviar cantidad=0, no debe entrar al flujo de generación aleatoria.
+        // Si el DTO también es nulo, debe caer al final retornando Bad Request.
+        mockMvc.perform(post("/api/solicitudes?cantidad=0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Debe enviar un objeto JSON o especificar una 'cantidad'")));
+
+        // Verificamos que NO se haya intentado llamar al servicio de creación para aleatorios
+        verify(solicitudService, never()).create(any(SolicitudCredito.class));
+    }
+
     @DisplayName("POST /api/solicitudes?cantidad=3 - Sin clientes retorna error")
     @Test
     void controller_Post_GenerarSolicitudesSinClientes() throws Exception {
