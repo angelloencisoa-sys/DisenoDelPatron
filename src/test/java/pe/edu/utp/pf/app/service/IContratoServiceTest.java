@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -184,15 +185,12 @@ class IContratoServiceTest {
         when(this.solicitudRepoMock.findById(anyInt())).thenReturn(Optional.empty());
 
         // 2. Ejecución y 3. Comparación
-        try {
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
             this.serviceMock.generarContratoDesdePlantilla("Consumo", 999);
-            assertThat(false).isTrue(); // No debe llegar aquí
-        } catch (ServiceException e) {
-            // La implementación lanza ServiceException cuando no existe la solicitud
-            assertThat(e).isInstanceOf(ServiceException.class);
-            // No validar mensaje específico porque el catch general usa "Error interno del servidor"
-            assertThat(e.getMessage()).isNotNull();
-        }
+        });
+        // Esto valida lo que antes hacías en las líneas 192 y 194
+        assertThat(exception).isInstanceOf(ServiceException.class);
+        assertThat(exception.getMessage()).isNotNull();
     }
 
     @DisplayName("Service - Generar Contrato con tipo inválido")
@@ -202,15 +200,12 @@ class IContratoServiceTest {
         when(this.solicitudRepoMock.findById(anyInt())).thenReturn(Optional.of(saveSolicitud));
 
         // 2. Ejecución y 3. Comparación
-        try {
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
             this.serviceMock.generarContratoDesdePlantilla("TipoInvalido", 1);
-            // Si llegamos aquí, significa que no se lanzó excepción (test falla)
-            assertThat(true).isFalse();
-        } catch (ServiceException e) {
-            // La implementación captura IllegalArgumentException y la convierte en ServiceException
-            assertThat(e).isInstanceOf(ServiceException.class);
-            assertThat(e.getMessage()).isNotNull();
-        }
+        });
+
+        assertThat(exception).isInstanceOf(ServiceException.class);
+        assertThat(exception.getMessage()).isNotNull();
     }
 
     @DisplayName("Service - Verificar clonación del Contrato (Prototype)")
@@ -284,11 +279,10 @@ class IContratoServiceTest {
         when(this.repoMock.save(any())).thenThrow(RuntimeException.class);
 
         // 2. Ejecución y 3. Comparación
-        try {
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
             this.serviceMock.generarContratoDesdePlantilla("Consumo", 1);
-            assertThat(false).isTrue(); // No debe llegar aquí
-        } catch (ServiceException e) {
-            assertThat(e).isInstanceOf(ServiceException.class);
-        }
+        });
+
+        assertThat(exception).isInstanceOf(ServiceException.class);
     }
 }

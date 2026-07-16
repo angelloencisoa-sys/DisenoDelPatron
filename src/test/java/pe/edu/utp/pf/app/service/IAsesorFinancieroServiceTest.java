@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -165,7 +167,7 @@ class IAsesorFinancieroServiceTest {
     void service_Delete_SuccessfulDeletion() {
         try {
             this.serviceMock.deleteById(1);
-            assertThat(true).isTrue();
+            assertTrue(true);
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
