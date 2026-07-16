@@ -1,12 +1,14 @@
 package pe.edu.utp.pf.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConfiguracionFinancieraDTO {
-    private Double tasaMoraDiaria;
-    private Double porcentajeIgv;
-    private Double tasaInteresMaxima;
+
+    private Double tasaInteresMaximaLegal;
+    private Double porcentajeMoraDiaria;
+    private Double igv;
 }
