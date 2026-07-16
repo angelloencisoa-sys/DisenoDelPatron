@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.serviceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -21,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataRetrievalFailureException;
 
+import pe.edu.utp.pf.exception.ServiceException;
 import pe.edu.utp.pf.model.Cliente;
 import pe.edu.utp.pf.model.HistorialCrediticio;
 import pe.edu.utp.pf.model.PerfilRiesgo;
@@ -101,13 +103,9 @@ class IClienteServiceImplTest {
     @DisplayName("ClienteServiceImpl - Crear Cliente maneja excepción")
     @Test
     void testCreate_HandleException() {
-        when(this.repoMock.save(any())).thenThrow(RuntimeException.class);
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
 
-        try {
-            this.serviceMock.create(cliente);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        assertThrows(ServiceException.class, () -> this.serviceMock.create(cliente));
     }
 
     @DisplayName("ClienteServiceImpl - Obtener todos los Clientes")
@@ -117,6 +115,15 @@ class IClienteServiceImplTest {
         List<Cliente> result = this.serviceMock.getAll();
 
         assertThat(result).isNotNull().hasSize(2).contains(saveCliente, cliente);
+    }
+
+    @DisplayName("ClienteServiceImpl - Obtener todos los Clientes maneja excepción")
+    @Test
+    void testGetAll_HandleException() {
+        when(this.repoMock.findAll()).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+        List<Cliente> result = this.serviceMock.getAll();
+
+        assertThat(result).isNotNull().isEmpty();
     }
 
     @DisplayName("ClienteServiceImpl - Obtener Cliente por ID")
@@ -165,6 +172,15 @@ class IClienteServiceImplTest {
         assertThat(result.getIdCliente()).isEqualTo(1);
     }
 
+    @DisplayName("ClienteServiceImpl - Actualizar Cliente maneja excepción")
+    @Test
+    void testUpdate_HandleException() {
+        Cliente clienteModificado = new Cliente();
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.update(saveCliente, clienteModificado));
+    }
+
     @DisplayName("ClienteServiceImpl - Eliminar Cliente")
     @Test
     void testDeleteById_Success() {
@@ -179,12 +195,8 @@ class IClienteServiceImplTest {
     @DisplayName("ClienteServiceImpl - Eliminar Cliente maneja excepción")
     @Test
     void testDeleteById_HandleException() {
-        doThrow(RuntimeException.class).when(this.repoMock).deleteById(anyInt());
+        doThrow(new DataRetrievalFailureException("Error simulado BD")).when(this.repoMock).deleteById(anyInt());
 
-        try {
-            this.serviceMock.deleteById(1);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        assertThrows(ServiceException.class, () -> this.serviceMock.deleteById(1));
     }
 }
