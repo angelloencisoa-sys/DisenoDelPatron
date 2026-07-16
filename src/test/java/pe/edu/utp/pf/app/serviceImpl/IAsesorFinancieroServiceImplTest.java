@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.serviceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataRetrievalFailureException;
 
+import pe.edu.utp.pf.exception.ServiceException;
 import pe.edu.utp.pf.model.AsesorFinanciero;
 import pe.edu.utp.pf.repository.AsesorFinancieroRepository;
 import pe.edu.utp.pf.service.impl.AsesorFinancieroServiceImpl;
@@ -79,13 +81,11 @@ class IAsesorFinancieroServiceImplTest {
     @DisplayName("AsesorFinancieroServiceImpl - Crear Asesor maneja excepción")
     @Test
     void testCreate_HandleException() {
-        when(this.repoMock.save(any())).thenThrow(RuntimeException.class);
+        // CORRECCIÓN: Usar una excepción que extienda de DataAccessException para activar el catch
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error BD"));
 
-        try {
-            this.serviceMock.create(asesor);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        // Tu servicio captura DataAccessException y lanza ServiceException
+        assertThrows(ServiceException.class, () -> this.serviceMock.create(asesor));
     }
 
     @DisplayName("AsesorFinancieroServiceImpl - Obtener todos los Asesores")
@@ -95,6 +95,15 @@ class IAsesorFinancieroServiceImplTest {
         List<AsesorFinanciero> result = this.serviceMock.getAll();
 
         assertThat(result).isNotNull().hasSize(2).contains(saveAsesor, asesor);
+    }
+
+    @DisplayName("AsesorFinancieroServiceImpl - Obtener todos los Asesores maneja excepción")
+    @Test
+    void testGetAll_HandleException() {
+        when(this.repoMock.findAll()).thenThrow(new DataRetrievalFailureException("Error BD"));
+        List<AsesorFinanciero> result = this.serviceMock.getAll();
+
+        assertThat(result).isNotNull().isEmpty();
     }
 
     @DisplayName("AsesorFinancieroServiceImpl - Obtener Asesor por ID")
@@ -142,6 +151,15 @@ class IAsesorFinancieroServiceImplTest {
         assertThat(result.getIdAsesor()).isEqualTo(1);
     }
 
+    @DisplayName("AsesorFinancieroServiceImpl - Actualizar Asesor maneja excepción")
+    @Test
+    void testUpdate_HandleException() {
+        AsesorFinanciero asesorModificado = new AsesorFinanciero();
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error BD"));
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.update(saveAsesor, asesorModificado));
+    }
+
     @DisplayName("AsesorFinancieroServiceImpl - Eliminar Asesor")
     @Test
     void testDeleteById_Success() {
@@ -164,4 +182,6 @@ class IAsesorFinancieroServiceImplTest {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
     }
+
+
 }
