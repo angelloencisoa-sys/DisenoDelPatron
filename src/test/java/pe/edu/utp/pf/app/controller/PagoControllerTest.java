@@ -126,6 +126,22 @@ class PagoControllerTest {
         verify(pagoService, times(5)).create(any(Pago.class));
     }
 
+    @DisplayName("POST /api/pagos?cantidad=0 - Cantidad cero retorna error")
+    @Test
+    void controller_Post_RegistrarPagoCantidadCero() throws Exception {
+        mockMvc.perform(post("/api/pagos?cantidad=0")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("POST /api/pagos?cantidad=-1 - Cantidad negativa retorna error")
+    @Test
+    void controller_Post_RegistrarPagoCantidadNegativa() throws Exception {
+        mockMvc.perform(post("/api/pagos?cantidad=-1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
     @DisplayName("POST /api/pagos - Sin datos retorna error")
     @Test
     void controller_Post_SinDatosRetornaError() throws Exception {

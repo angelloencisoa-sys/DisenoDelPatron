@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pe.edu.utp.pf.controller.ConfiguracionFinancieraController;
@@ -107,6 +108,22 @@ class ConfiguracionFinancieraControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(""))
                 .andExpect(status().isBadRequest());
+    }
+
+    @DisplayName("Controller Unit Test - Llamada directa con DTO nulo")
+    @Test
+    void unitTest_ActualizarConfiguracionConDtoNulo() {
+        // Instanciamos el controlador directamente con el mock
+        ConfiguracionFinancieraController controllerDirecto =
+                new ConfiguracionFinancieraController(configuracionService);
+
+        // Al pasar null directamente, forzamos que convertToEntity reciba null
+        ResponseEntity<ConfiguracionFinancieraDTO> response =
+                controllerDirecto.actualizarConfiguracionGlobal(null);
+
+        // Verificamos que no se rompa la lógica y retorne una respuesta con body nulo
+        org.junit.jupiter.api.Assertions.assertNotNull(response);
+        org.junit.jupiter.api.Assertions.assertNull(response.getBody());
     }
 
     @DisplayName("GET /api/configuraciones/calcular-mora - Calcular mora por retraso")
