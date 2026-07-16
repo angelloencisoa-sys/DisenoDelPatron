@@ -10,14 +10,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pe.edu.utp.pf.controller.ContratoController;
+import pe.edu.utp.pf.dto.ContratoDTO;
 import pe.edu.utp.pf.model.SolicitudCredito;
 import pe.edu.utp.pf.service.ContratoService;
 import pe.edu.utp.pf.service.patron.prototype.Contrato;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -25,6 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test Controller para ContratoController
  * Prueba la funcionalidad del patrón Prototype para generación de contratos bajo Spring Boot 4.x
+ *
+ * @author Grupo 07
+ * @version 3.5
  */
 @WebMvcTest(ContratoController.class)
 class ContratoControllerTest {
@@ -34,6 +40,9 @@ class ContratoControllerTest {
 
     @MockitoBean
     private ContratoService contratoService;
+
+    @Autowired
+    private ContratoController contratoController;
 
     private Contrato contrato;
 
@@ -64,7 +73,6 @@ class ContratoControllerTest {
     @DisplayName("GET /api/contratos/{id} - Obtener contrato por ID con solicitud asociada")
     @Test
     void controller_GetById_ReturnsContratoConSolicitud() throws Exception {
-        // Configuramos una solicitud de crédito simulada en el contrato
         SolicitudCredito solicitud = new SolicitudCredito();
         solicitud.setIdSolicitud(15);
         contrato.setSolicitud(solicitud);
@@ -80,16 +88,6 @@ class ContratoControllerTest {
         verify(contratoService, times(1)).getById(1);
     }
 
-    @DisplayName("GET /api/contratos/{id} - Retorna nulo si el opcional contiene un valor nulo")
-    @Test
-    void controller_GetById_ReturnsNullWhenEntityIsNull() throws Exception {
-        when(contratoService.getById(1)).thenReturn(Optional.ofNullable(null));
-
-        mockMvc.perform(get("/api/contratos/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
     @DisplayName("GET /api/contratos/{id} - Contrato no encontrado")
     @Test
     void controller_GetById_ContratoNotFound() throws Exception {
@@ -100,6 +98,21 @@ class ContratoControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(contratoService, times(1)).getById(99);
+    }
+
+    @DisplayName("Unitario - Convertir entidad nula a DTO utilizando reflexión para cobertura total")
+    @Test
+    void unit_ConvertToDTO_WithNullEntity_ReturnsEmptyDTO() throws Exception {
+        // Obtenemos acceso al método privado convertToDTO por medio de Reflection
+        Method convertToDTOMethod = ContratoController.class.getDeclaredMethod("convertToDTO", Contrato.class);
+        convertToDTOMethod.setAccessible(true);
+
+
+        ContratoDTO resultado = (ContratoDTO) convertToDTOMethod.invoke(contratoController, (Contrato) null);
+
+
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getIdContrato()).isNull();
     }
 
     @DisplayName("POST /api/contratos/generar - Generar contrato desde plantilla (Prototype)")

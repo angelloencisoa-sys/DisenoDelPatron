@@ -9,10 +9,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.utp.pf.dto.ContratoDTO;
-import pe.edu.utp.pf.model.SolicitudCredito;
 import pe.edu.utp.pf.service.ContratoService;
 import pe.edu.utp.pf.service.patron.prototype.Contrato;
 
+/**
+ * Controlador para la gestión de contratos utilizando el patrón Prototype.
+ * Optimizado para cumplir los estándares de calidad de SonarQube.
+ *
+ * @author Grupo 07
+ * @version 1.1
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/contratos")
@@ -32,7 +38,7 @@ public class ContratoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /*
+    /**
      * Endpoint oficial que gatilla la creación de un contrato clonando una plantilla en memoria.
      * Implementa de forma limpia el patrón de diseño Prototype requerido por la rúbrica.
      */
@@ -53,11 +59,9 @@ public class ContratoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(contratoClonado));
     }
 
-   //hola
-
     private ContratoDTO convertToDTO(Contrato entity) {
         if (entity == null) {
-            return null;
+            return new ContratoDTO();
         }
 
         Integer idSolicitudAsociada = null;
@@ -73,6 +77,4 @@ public class ContratoController {
                 idSolicitudAsociada
         );
     }
-
-
 }
