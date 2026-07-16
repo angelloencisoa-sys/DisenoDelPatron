@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.serviceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -20,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataRetrievalFailureException;
 
 
+import pe.edu.utp.pf.exception.ServiceException;
 import pe.edu.utp.pf.model.SolicitudCredito;
 import pe.edu.utp.pf.repository.SolicitudCreditoRepository;
 import pe.edu.utp.pf.service.impl.SolicitudCreditoServiceImpl;
@@ -81,13 +83,11 @@ class ISolicitudCreditoServiceImplTest {
     @DisplayName("SolicitudCreditoServiceImpl - Crear Solicitud maneja excepción")
     @Test
     void testCreate_HandleException() {
-        when(this.repoMock.save(any())).thenThrow(RuntimeException.class);
 
-        try {
-            this.serviceMock.create(solicitud);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.create(solicitud));
     }
 
     @DisplayName("SolicitudCreditoServiceImpl - Obtener todas las Solicitudes")
@@ -97,6 +97,15 @@ class ISolicitudCreditoServiceImplTest {
         List<SolicitudCredito> result = this.serviceMock.getAll();
 
         assertThat(result).isNotNull().hasSize(2).contains(saveSolicitud, solicitud);
+    }
+
+    @DisplayName("SolicitudCreditoServiceImpl - Obtener todas las Solicitudes maneja excepción")
+    @Test
+    void testGetAll_HandleException() {
+        when(this.repoMock.findAll()).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+        List<SolicitudCredito> result = this.serviceMock.getAll();
+
+        assertThat(result).isNotNull().isEmpty();
     }
 
     @DisplayName("SolicitudCreditoServiceImpl - Obtener Solicitud por ID")
@@ -144,6 +153,15 @@ class ISolicitudCreditoServiceImplTest {
         assertThat(result.getIdSolicitud()).isEqualTo(1);
     }
 
+    @DisplayName("SolicitudCreditoServiceImpl - Actualizar Solicitud maneja excepción")
+    @Test
+    void testUpdate_HandleException() {
+        SolicitudCredito solicitudModificada = new SolicitudCredito();
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.update(saveSolicitud, solicitudModificada));
+    }
+
     @DisplayName("SolicitudCreditoServiceImpl - Eliminar Solicitud")
     @Test
     void testDeleteById_Success() {
@@ -158,13 +176,11 @@ class ISolicitudCreditoServiceImplTest {
     @DisplayName("SolicitudCreditoServiceImpl - Eliminar Solicitud maneja excepción")
     @Test
     void testDeleteById_HandleException() {
-        doThrow(RuntimeException.class).when(this.repoMock).deleteById(anyInt());
 
-        try {
-            this.serviceMock.deleteById(1);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        doThrow(new DataRetrievalFailureException("Error simulado BD")).when(this.repoMock).deleteById(anyInt());
+
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.deleteById(1));
     }
 
     @DisplayName("SolicitudCreditoServiceImpl - Crear Solicitud sin estado asigna Pendiente")

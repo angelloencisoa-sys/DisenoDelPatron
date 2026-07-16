@@ -1,6 +1,7 @@
 package pe.edu.utp.pf.app.serviceImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -21,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataRetrievalFailureException;
 
+import pe.edu.utp.pf.exception.ServiceException;
 import pe.edu.utp.pf.model.Credito;
 import pe.edu.utp.pf.model.Cronograma;
 import pe.edu.utp.pf.repository.CreditoRepository;
@@ -92,13 +94,11 @@ class ICreditoServiceImplTest {
     @DisplayName("CreditoServiceImpl - Crear Crédito maneja excepción")
     @Test
     void testCreate_HandleException() {
-        when(this.repoMock.save(any())).thenThrow(RuntimeException.class);
+        // CORRECCIÓN: Lanzar excepción compatible con DataAccessException
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
 
-        try {
-            this.serviceMock.create(credito);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        // Tu servicio captura el error y lanza ServiceException
+        assertThrows(ServiceException.class, () -> this.serviceMock.create(credito));
     }
 
     @DisplayName("CreditoServiceImpl - Obtener todos los Créditos")
@@ -108,6 +108,15 @@ class ICreditoServiceImplTest {
         List<Credito> result = this.serviceMock.getAll();
 
         assertThat(result).isNotNull().hasSize(2).contains(saveCredito, credito);
+    }
+
+    @DisplayName("CreditoServiceImpl - Obtener todos los Créditos maneja excepción")
+    @Test
+    void testGetAll_HandleException() {
+        when(this.repoMock.findAll()).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+        List<Credito> result = this.serviceMock.getAll();
+
+        assertThat(result).isNotNull().isEmpty();
     }
 
     @DisplayName("CreditoServiceImpl - Obtener Crédito por ID")
@@ -155,6 +164,15 @@ class ICreditoServiceImplTest {
         assertThat(result.getIdCredito()).isEqualTo(1);
     }
 
+    @DisplayName("CreditoServiceImpl - Actualizar Crédito maneja excepción")
+    @Test
+    void testUpdate_HandleException() {
+        Credito creditoModificado = new Credito();
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+
+        assertThrows(ServiceException.class, () -> this.serviceMock.update(saveCredito, creditoModificado));
+    }
+
     @DisplayName("CreditoServiceImpl - Eliminar Crédito")
     @Test
     void testDeleteById_Success() {
@@ -169,12 +187,8 @@ class ICreditoServiceImplTest {
     @DisplayName("CreditoServiceImpl - Eliminar Crédito maneja excepción")
     @Test
     void testDeleteById_HandleException() {
-        doThrow(RuntimeException.class).when(this.repoMock).deleteById(anyInt());
+        doThrow(new DataRetrievalFailureException("Error simulado BD")).when(this.repoMock).deleteById(anyInt());
 
-        try {
-            this.serviceMock.deleteById(1);
-        } catch (Exception e) {
-            assertThat(e).isInstanceOf(RuntimeException.class);
-        }
+        assertThrows(ServiceException.class, () -> this.serviceMock.deleteById(1));
     }
 }
