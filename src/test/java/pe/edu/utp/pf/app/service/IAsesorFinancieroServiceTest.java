@@ -121,7 +121,7 @@ class IAsesorFinancieroServiceTest {
 
         try {
             asesorWithId = this.serviceMock.getById(1);
-            assertThat(asesorWithId.isEmpty()).isTrue();
+            assertThat(asesorWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -135,7 +135,7 @@ class IAsesorFinancieroServiceTest {
 
         try {
             asesorWithId = this.serviceMock.getById(1);
-            assertThat(asesorWithId.isEmpty()).isTrue();
+            assertThat(asesorWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }

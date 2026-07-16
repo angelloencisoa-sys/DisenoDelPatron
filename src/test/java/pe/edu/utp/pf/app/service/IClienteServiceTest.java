@@ -113,8 +113,7 @@ class IClienteServiceTest {
         when(this.repoMock.findAll()).thenReturn(clienteList);
         List<Cliente> list = this.serviceMock.getAll();
 
-        assertThat(list.size()).isGreaterThan(1);
-        assertThat(list).contains(saveCliente, cliente);
+        assertThat(list).hasSizeGreaterThan(1).contains(saveCliente, cliente);
     }
 
     @DisplayName("Service - Buscar y retornar por Id un Cliente")
@@ -140,7 +139,7 @@ class IClienteServiceTest {
 
         try {
             clienteWithId = this.serviceMock.getById(1);
-            assertThat(clienteWithId.isEmpty()).isTrue();
+            assertThat(clienteWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -154,7 +153,7 @@ class IClienteServiceTest {
 
         try {
             clienteWithId = this.serviceMock.getById(1);
-            assertThat(clienteWithId.isEmpty()).isTrue();
+            assertThat(clienteWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }

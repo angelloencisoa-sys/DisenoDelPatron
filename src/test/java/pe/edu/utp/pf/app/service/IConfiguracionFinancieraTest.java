@@ -125,8 +125,7 @@ class IConfiguracionFinancieraTest {
         }
 
         // 3. Comparación
-        assertThat(mora).isNotNull();
-        assertThat(mora).isEqualTo(25.0);
+        assertThat(mora).isNotNull().isEqualTo(25.0);
     }
 
     @DisplayName("Service - Calcular mora con valores nulos")

@@ -87,7 +87,7 @@ class IContratoServiceTest {
 
         // 3. Comparación
         assertThat(contratoResult).isNotNull();
-        assertThat(contratoResult.isPresent()).isTrue();
+        assertThat(contratoResult).isPresent();
         assertThat(contratoResult.get().getIdContrato()).isEqualTo(1);
         assertThat(contratoResult.get().getTipo()).isEqualTo("Consumo");
     }
@@ -108,7 +108,7 @@ class IContratoServiceTest {
 
         // 3. Comparación
         assertThat(contratoResult).isNotNull();
-        assertThat(contratoResult.isEmpty()).isTrue();
+        assertThat(contratoResult).isNotPresent();
     }
 
     @DisplayName("Service - Buscar por Id y retornar Excepción")
@@ -121,7 +121,7 @@ class IContratoServiceTest {
         // 2. Ejecución
         try {
             contratoResult = this.serviceMock.getById(1);
-            assertThat(contratoResult.isEmpty()).isTrue();
+            assertThat(contratoResult).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
