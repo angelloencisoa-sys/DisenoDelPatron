@@ -99,7 +99,7 @@ class IPagoServiceTest {
         when(this.repoMock.findAll()).thenReturn(List.of(pago, savePago));
         List<?> list = this.serviceMock.getAll();
 
-        assertThat(list.size()).isGreaterThan(1);
+        assertThat(list).hasSizeGreaterThan(1);
     }
 
     @DisplayName("Service - Buscar y retornar por Id un Pago")
@@ -125,7 +125,7 @@ class IPagoServiceTest {
 
         try {
             pagoWithId = this.serviceMock.getById(1);
-            assertThat(pagoWithId.isEmpty()).isTrue();
+            assertThat(pagoWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -139,7 +139,7 @@ class IPagoServiceTest {
 
         try {
             pagoWithId = this.serviceMock.getById(1);
-            assertThat(pagoWithId.isEmpty()).isTrue();
+            assertThat(pagoWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }

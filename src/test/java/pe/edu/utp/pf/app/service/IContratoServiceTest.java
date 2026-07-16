@@ -86,10 +86,11 @@ class IContratoServiceTest {
         }
 
         // 3. Comparación
-        assertThat(contratoResult).isNotNull();
-        assertThat(contratoResult).isPresent();
-        assertThat(contratoResult.get().getIdContrato()).isEqualTo(1);
-        assertThat(contratoResult.get().getTipo()).isEqualTo("Consumo");
+        assertThat(contratoResult).isNotNull().isPresent().hasValueSatisfying(c -> {
+                    assertThat(c.getIdContrato()).isEqualTo(1);
+                    assertThat(c.getTipo()).isEqualTo("Consumo");
+                });
+
     }
 
     @DisplayName("Service - Buscar por Id y retornar vacío")
@@ -107,8 +108,7 @@ class IContratoServiceTest {
         }
 
         // 3. Comparación
-        assertThat(contratoResult).isNotNull();
-        assertThat(contratoResult).isNotPresent();
+        assertThat(contratoResult).isNotNull().isNotPresent();
     }
 
     @DisplayName("Service - Buscar por Id y retornar Excepción")

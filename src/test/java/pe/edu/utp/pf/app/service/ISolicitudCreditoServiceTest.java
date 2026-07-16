@@ -97,8 +97,7 @@ class ISolicitudCreditoServiceTest {
         when(this.repoMock.findAll()).thenReturn(solicitudList);
         List<SolicitudCredito> list = this.serviceMock.getAll();
 
-        assertThat(list.size()).isGreaterThan(1);
-        assertThat(list).contains(saveSolicitud, solicitud);
+        assertThat(list).hasSizeGreaterThan(1).contains(saveSolicitud, solicitud);
     }
 
     @DisplayName("Service - Buscar y retornar por Id una Solicitud")
@@ -124,7 +123,7 @@ class ISolicitudCreditoServiceTest {
 
         try {
             solicitudWithId = this.serviceMock.getById(1);
-            assertThat(solicitudWithId.isEmpty()).isTrue();
+            assertThat(solicitudWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
@@ -138,7 +137,7 @@ class ISolicitudCreditoServiceTest {
 
         try {
             solicitudWithId = this.serviceMock.getById(1);
-            assertThat(solicitudWithId.isEmpty()).isTrue();
+            assertThat(solicitudWithId).isNotPresent();
         } catch (Exception e) {
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
