@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.dao.DataRetrievalFailureException;
 import pe.edu.utp.pf.model.SolicitudCredito;
 import pe.edu.utp.pf.repository.ContratoRepository;
 import pe.edu.utp.pf.repository.SolicitudCreditoRepository;
@@ -87,6 +88,16 @@ class IContratoServiceImplTest {
     void testGetById_NotFound() {
         when(this.repoMock.findById(anyInt())).thenReturn(Optional.empty());
         Optional<Contrato> result = this.serviceMock.getById(999);
+
+        assertThat(result).isEmpty();
+    }
+
+
+    @DisplayName("ContratoServiceImpl - Buscar Contrato por ID maneja DataAccessException")
+    @Test
+    void testGetById_HandleDataAccessException() {
+        when(this.repoMock.findById(anyInt())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+        Optional<Contrato> result = this.serviceMock.getById(1);
 
         assertThat(result).isEmpty();
     }
@@ -169,6 +180,28 @@ class IContratoServiceImplTest {
 
         assertThat(exception).isInstanceOf(ServiceException.class);
         assertThat(exception.getMessage()).isNotNull();
+    }
+
+    @DisplayName("ContratoServiceImpl - Generar Contrato maneja DataAccessException")
+    @Test
+    void testGenerarContratoDesdePlantilla_HandleDataAccessException() {
+        when(this.solicitudRepoMock.findById(anyInt())).thenReturn(Optional.of(saveSolicitud));
+        when(this.repoMock.save(any())).thenThrow(new DataRetrievalFailureException("Error simulado BD"));
+
+        assertThrows(ServiceException.class, () -> {
+            this.serviceMock.generarContratoDesdePlantilla("Consumo", 1);
+        });
+    }
+
+    @DisplayName("ContratoServiceImpl - Generar Contrato maneja Exception Genérica")
+    @Test
+    void testGenerarContratoDesdePlantilla_HandleGenericException() {
+        when(this.solicitudRepoMock.findById(anyInt())).thenReturn(Optional.of(saveSolicitud));
+        when(this.repoMock.save(any())).thenThrow(new RuntimeException("Error inesperado en clonación"));
+
+        assertThrows(ServiceException.class, () -> {
+            this.serviceMock.generarContratoDesdePlantilla("Consumo", 1);
+        });
     }
 
     @DisplayName("ContratoServiceImpl - Verificar clonación del Contrato (Prototype)")
